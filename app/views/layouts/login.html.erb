@@ -6,22 +6,11 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body data-no-turbolink>
-  <section id="container" >
+<body>
 
-    <%= render partial: 'shared/top_bar' %>
-
-    <%= render partial: 'shared/sidebar' %>
-
-    <div>
-      <%= flash_messages %>
-    </div>
-
-    <%= yield %>
-
-    <%= render partial: 'shared/footer' %>
-
-  </section>
+<%= render partial: "static_pages/login" %>
 
 </body>
 </html>
+
+
