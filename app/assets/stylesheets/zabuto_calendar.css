@@ -35,7 +35,7 @@ div.zabuto_calendar .table tr.calendar-month-header th span {
     cursor: pointer;
     display: inline-block;
     padding-bottom:0px;
-	
+
 }
 
 div.zabuto_calendar .table tr.calendar-dow-header th {
@@ -48,7 +48,7 @@ div.zabuto_calendar .table tr:last-child {
 
 div.zabuto_calendar .table tr.calendar-month-header th {
     padding:10px;
-	
+
 	}
 
 div.zabuto_calendar .table-bordered tr.calendar-month-header th {

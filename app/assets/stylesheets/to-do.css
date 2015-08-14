@@ -15,7 +15,7 @@
 	clear: both;
 }
 
-.tasks-widget .task-footer  { 
+.tasks-widget .task-footer  {
 	margin-top: 5px;
 }
 
@@ -102,7 +102,7 @@
 		float:inherit;
 		display:block;
 	}
-	
+
 	.tasks-widget .task-list-projects li > .label {
 		margin-bottom:5px;
 	}

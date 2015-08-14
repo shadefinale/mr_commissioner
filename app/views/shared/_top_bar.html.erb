@@ -1,6 +1,6 @@
 <header class="header black-bg">
   <div class="sidebar-toggle-box">
-    <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+    <div class="fa fa-bars fa-inverse tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
   </div>
   <!--logo start-->
   <%= link_to '#', class: "logo" do %>
@@ -13,7 +13,7 @@
         <!-- settings start -->
         <li class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="<% root_path %>">
-                <i class="fa fa-tasks"></i>
+                <i class="fa fa-tasks fa-inverse"></i>
                 <span class="badge bg-theme">4</span>
             </a>
             <ul class="dropdown-menu extended tasks-bar">
@@ -82,7 +82,7 @@
         <!-- inbox dropdown start-->
         <li id="header_inbox_bar" class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
-                <i class="fa fa-envelope-o"></i>
+                <i class="fa fa-envelope-o fa-inverse"></i>
                 <span class="badge bg-theme">5</span>
             </a>
             <ul class="dropdown-menu extended inbox">
