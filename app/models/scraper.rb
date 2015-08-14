@@ -5,6 +5,7 @@ class Scraper
   def initialize(league_id, season = DateTime.now.year)
     fail ArgumentError unless league_id.to_s =~ /^\d+$/
     @agent = Mechanize.new
+    @agent.history_added = Proc.new { sleep 0.5 }
     @league_id = league_id.to_i
     @season = season
     initialize_league_settings
