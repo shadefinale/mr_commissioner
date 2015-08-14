@@ -24,11 +24,11 @@ div.zabuto_calendar .table td {
 
 div.zabuto_calendar .table tr th,
 div.zabuto_calendar .table tr td {
-    background-color:;
+    background-color: #fff;
 }
 
 div.zabuto_calendar .table tr.calendar-month-header th {
-    background-color:;
+    background-color: #fff;
 }
 
 div.zabuto_calendar .table tr.calendar-month-header th span {
@@ -39,7 +39,7 @@ div.zabuto_calendar .table tr.calendar-month-header th span {
 }
 
 div.zabuto_calendar .table tr.calendar-dow-header th {
-    background-color:;
+    background-color: #fff;
 }
 
 div.zabuto_calendar .table tr:last-child {
@@ -81,7 +81,7 @@ div.zabuto_calendar .table tr td div.day {
 /* actions and events */
 div.zabuto_calendar .table tr td.event div.day,
 div.zabuto_calendar ul.legend li.event {
-    background-color:;
+    background-color: #fff;
 }
 
 div.zabuto_calendar .table tr td.dow-clickable,
@@ -92,14 +92,14 @@ div.zabuto_calendar .table tr td.event-clickable {
 /* badge */
 div.zabuto_calendar .badge-today,
 div.zabuto_calendar div.legend span.badge-today {
-    background-color:;
+    background-color: #fff;
     color: #ffffff;
     text-shadow: none;
 }
 
 div.zabuto_calendar .badge-event,
 div.zabuto_calendar div.legend span.badge-event {
-    background-color:;
+    background-color: #fff;
     color: #ffffff;
     text-shadow: none;
 }
