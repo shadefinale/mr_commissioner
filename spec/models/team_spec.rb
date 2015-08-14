@@ -1,0 +1,12 @@
+require 'rails_helper'
+
+RSpec.describe Team, type: :model do
+  let(:league){create(:league)}
+  let(:team){create(:team)}
+
+  context "associations"
+
+    it "should respond to league association" do
+      expect(team).to respond_to(:league)
+    end
+  end
