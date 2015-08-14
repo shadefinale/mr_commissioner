@@ -11,27 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150814162016) do
+ActiveRecord::Schema.define(version: 20150814180810) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "leagues", force: :cascade do |t|
-    t.string  "name"
-    t.integer "roster_count_id"
+    t.string "name"
   end
 
   create_table "player_scores", force: :cascade do |t|
-    t.integer "teams"
     t.integer "player_id"
     t.integer "week_id"
     t.decimal "points",    precision: 5, scale: 2
     t.boolean "starter"
+    t.integer "team_id"
   end
 
   create_table "players", force: :cascade do |t|
     t.string "name"
-    t.string "postiion"
+    t.string "position"
   end
 
   create_table "roster_counts", force: :cascade do |t|
@@ -45,7 +44,15 @@ ActiveRecord::Schema.define(version: 20150814162016) do
     t.integer "dl"
     t.integer "db"
     t.integer "flex"
+    t.integer "league_id"
+    t.integer "year"
+    t.integer "dt"
+    t.integer "de"
+    t.integer "cb"
+    t.integer "s"
   end
+
+  add_index "roster_counts", ["league_id", "year"], name: "index_roster_counts_on_league_id_and_year", unique: true, using: :btree
 
   create_table "teams", force: :cascade do |t|
     t.string  "name"
@@ -56,9 +63,9 @@ ActiveRecord::Schema.define(version: 20150814162016) do
 
   create_table "weeks", force: :cascade do |t|
     t.integer "year"
-    t.integer "week_number"
+    t.integer "number"
   end
 
-  add_foreign_key "leagues", "roster_counts"
+  add_foreign_key "player_scores", "players"
   add_foreign_key "player_scores", "weeks"
 end
