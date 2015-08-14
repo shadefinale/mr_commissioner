@@ -49,19 +49,19 @@ class Scraper
   end
 
   def extract_starter_counts(table)
-    @qb_count = table.match(/\(QB\)\d/).to_s[-1]    || "0"
-    @rb_count = table.match(/\(RB\)\d/).to_s[-1]    || "0"
-    @wr_count = table.match(/\(WR\)\d/).to_s[-1]    || "0"
-    @te_count = table.match(/\(TE\)\d/).to_s[-1]    || "0"
-    @dt_count = table.match(/\(DT\)\d/).to_s[-1]    || "0"
-    @de_count = table.match(/\(DE\)\d/).to_s[-1]    || "0"
-    @lb_count = table.match(/\(LB\)\d/).to_s[-1]    || "0"
-    @dl_count = table.match(/\(DL\)\d/).to_s[-1]    || "0"
-    @cb_count = table.match(/\(CB\)\d/).to_s[-1]    || "0"
-    @s_count = table.match(/\(S\)\d/).to_s[-1]      || "0"
-    @db_count = table.match(/\(DB\)\d/).to_s[-1]    || "0"
-    @k_count = table.match(/\(K\)\d/).to_s[-1]      || "0"
-    @flex_count = table.match(/Flex\D*\d/).to_s[-1] || "0"
+    @qb_count   = (table.match(/\(QB\)\d/).to_s[-1]  || "0").to_i
+    @rb_count   = (table.match(/\(RB\)\d/).to_s[-1]  || "0").to_i
+    @wr_count   = (table.match(/\(WR\)\d/).to_s[-1]  || "0").to_i
+    @te_count   = (table.match(/\(TE\)\d/).to_s[-1]  || "0").to_i
+    @dt_count   = (table.match(/\(DT\)\d/).to_s[-1]  || "0").to_i
+    @de_count   = (table.match(/\(DE\)\d/).to_s[-1]  || "0").to_i
+    @lb_count   = (table.match(/\(LB\)\d/).to_s[-1]  || "0").to_i
+    @dl_count   = (table.match(/\(DL\)\d/).to_s[-1]  || "0").to_i
+    @cb_count   = (table.match(/\(CB\)\d/).to_s[-1]  || "0").to_i
+    @s_count    = (table.match(/\(S\)\d/).to_s[-1]   || "0").to_i
+    @db_count   = (table.match(/\(DB\)\d/).to_s[-1]  || "0").to_i
+    @k_count    = (table.match(/\(K\)\d/).to_s[-1]   || "0").to_i
+    @flex_count = (table.match(/Flex\D*\d/).to_s[-1] || "0").to_i
   end
 
   def scrape_league_all_teams

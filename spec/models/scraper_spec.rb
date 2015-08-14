@@ -64,79 +64,79 @@ describe Scraper do
     it "should find the qb count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.qb_count)
-        .to eq('1')
+        .to eq(1)
     end
 
     it "should find the rb count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.qb_count)
-        .to eq('1')
+        .to eq(1)
     end
 
     it "should find the dt count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.dt_count)
-        .to eq("0")
+        .to eq(0)
     end
 
     it "should find the wr count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.wr_count)
-        .to eq("2")
+        .to eq(2)
     end
 
     it "should find the te count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.te_count)
-        .to eq("1")
+        .to eq(1)
     end
 
     it "should find the de count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.de_count)
-        .to eq("0")
+        .to eq(0)
     end
 
     it "should find the lb count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.lb_count)
-        .to eq("0")
+        .to eq(0)
     end
 
     it "should find the dl count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.dl_count)
-        .to eq("0")
+        .to eq(0)
     end
 
     it "should find the cb count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.cb_count)
-        .to eq("0")
+        .to eq(0)
     end
 
     it "should find the s count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.s_count)
-        .to eq("0")
+        .to eq(0)
     end
 
     it "should find the db count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.db_count)
-        .to eq("0")
+        .to eq(0)
     end
 
     it "should find the kicker count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.k_count)
-        .to eq("1")
+        .to eq(1)
     end
 
     it "should find the flex count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.flex_count)
-        .to eq("1")
+        .to eq(1)
     end
 
   end
