@@ -1,7 +1,8 @@
 class StaticPagesController < ApplicationController
 
+  layout 'login', only: :login
+
   def login
-    render template: 'layouts/login'
   end
 
   def table
