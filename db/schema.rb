@@ -11,9 +11,53 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20150814152700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "leagues", force: :cascade do |t|
+    t.string  "name"
+    t.integer "roster_count_id"
+  end
+
+  create_table "player_scores", force: :cascade do |t|
+    t.integer "teams"
+    t.integer "player_id"
+    t.integer "week_id"
+    t.decimal "points",    precision: 5, scale: 2
+    t.boolean "starter"
+  end
+
+  create_table "players", force: :cascade do |t|
+    t.string "name"
+    t.string "postiion"
+  end
+
+  create_table "roster_counts", force: :cascade do |t|
+    t.integer "qb"
+    t.integer "rb"
+    t.integer "wr"
+    t.integer "te"
+    t.integer "k"
+    t.integer "d_st"
+    t.integer "lb"
+    t.integer "dl"
+    t.integer "db"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string  "team_name"
+    t.integer "leagues"
+  end
+
+  add_index "teams", ["leagues"], name: "index_teams_on_leagues", using: :btree
+
+  create_table "weeks", force: :cascade do |t|
+    t.integer "year"
+    t.integer "week_number"
+  end
+
+  add_foreign_key "leagues", "roster_counts"
+  add_foreign_key "player_scores", "weeks"
 end
