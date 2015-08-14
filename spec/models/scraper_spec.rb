@@ -17,6 +17,14 @@ describe Scraper do
     it 'does not accept string with non-digits league_id in its initializer' do
       expect { Scraper.new('143a124') }.to raise_error
     end
+
+    it 'should raise error if league not found' do
+      expect { Scraper.new('999999999') }.to raise_error(RuntimeError)
+    end
+
+    it 'should say league 143124 has 12 teams' do
+      expect(Scraper.new(143_124).team_count).to eq(12)
+    end
   end
 
   describe '#base_page' do
