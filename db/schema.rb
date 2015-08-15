@@ -85,6 +85,5 @@ ActiveRecord::Schema.define(version: 20150815014735) do
     t.integer "number"
   end
 
-  add_foreign_key "player_scores", "players"
   add_foreign_key "player_scores", "weeks"
 end
