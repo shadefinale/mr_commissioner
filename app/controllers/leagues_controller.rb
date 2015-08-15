@@ -1,8 +1,8 @@
 class LeaguesController < ApplicationController
 
-  def new
+  # def new
     #form to submit league_id for scraper
-  end
+  # end
 
   def create
     results = Scraper.new(league_params)
