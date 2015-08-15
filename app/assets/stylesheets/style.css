@@ -1922,6 +1922,13 @@ label {
 }
 
 
+#form-league {
+  margin: 0 auto 10px;
+}
+
+#form-league h2.form-login-heading {
+  padding: 12px 20px;
+}
 
 /*LOGIN CONFIGURATION PAGE*/
 .form-login {
