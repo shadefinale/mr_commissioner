@@ -12,7 +12,7 @@
             <thead>
               <tr>
                 <th><i class="fa fa-calendar"></i> Week</th>
-                <th><i class="fa fa-bullhorn"></i> All Play Record</th>
+                <th><i class="fa fa-bar-chart-o"></i> All Play Record</th>
               </tr>
             </thead>
             <tbody>
@@ -32,7 +32,7 @@
             <thead>
               <tr>
                 <th><i class="fa fa-calendar"></i> Week</th>
-                <th><i class="fa fa-bullhorn"></i> Best Individual Score</th>
+                <th><i class="fa fa-star"></i> Best Individual Score</th>
               </tr>
             </thead>
             <tbody>
@@ -48,8 +48,25 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th><i class="fa fa-bullhorn"></i> All Play Record</th>
-                <th><i class="fa fa-bullhorn"></i> All Play Percentage</th>
+                <th><i class="fa fa-calendar"></i> Week</th>
+                <th><i class="fa fa-frown-o"></i> Worst Individual Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Week <%= team.worst_week[1] %></td>
+                <td><%= team.worst_week[0] %></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <br><br>
+
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th><i class="fa fa-bar-chart-o"></i> All Play Record</th>
+                <th><i class="fa fa-bar-chart-o"></i> All Play Percentage</th>
               </tr>
             </thead>
             <tbody>
@@ -65,9 +82,9 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th><i class="fa fa-bullhorn"></i> All Play Wins / Total Matchs</th>
-                <th><i class="fa fa-bullhorn"></i> Wins Over Average</th>
-                <th><i class="fa fa-bullhorn"></i> "Luck" Factor</th>
+                <th><i class="fa fa-bar-chart-o"></i> All Play Wins / Total Matchs</th>
+                <th><i class="fa fa-bar-chart-o"></i> Wins Over Average</th>
+                <th><i class="fa fa-bar-chart-o"></i> "Luck" Factor</th>
               </tr>
             </thead>
             <tbody>
