@@ -6,14 +6,13 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body id = "login-page" data-no-turbolink>
+<body id = "login-page">
 
   <%= yield %>
 
-  <script>
-    $.backstretch("<%= asset_url "login-bg.jpg" %>", {speed: 500});
-  </script>
-
+  <%= javascript_tag do %>
+    $.backstretch("<%= asset_url 'login-bg.jpg' %>", {speed: 500});
+  <% end -%>
 
 </body>
 </html>
