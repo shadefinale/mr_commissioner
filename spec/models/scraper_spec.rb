@@ -43,7 +43,7 @@ describe Scraper do
     end
   end
 
-  describe '#settings_page' do
+  xdescribe '#settings_page' do
 
     it "should find the right league name" do
       heinbeil_league_scraper = Scraper.new(143_124)

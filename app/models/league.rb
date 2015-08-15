@@ -49,79 +49,79 @@ class League < ActiveRecord::Base
     [current_highest, highest_team, week]
   end
 
-  # def best_week(season=2014)
-  #   current_highest = 0
-  #   highest_team = nil
-  #   week = 0
+  def worst_week(season = 2014)
+    current_lowest = 100000000
+    lowest_team = nil
+    week = 0
 
-  #   teams.each do |team|
-  #     if team.best_week(season)[0] > current_highest
-  #       current_highest = team.best_week(season)[0]
-  #       highest_team = team
-  #       week = team.best_week(season)[1]
-  #     end
-  #   end
-  #   [current_highest, highest_team, week]
-  # end
+    teams.each do |team|
+      if team.worst_week(season)[0] < current_lowest
+        current_lowest = team.worst_week(season)[0]
+        lowest_team = team
+        week = team.worst_week(season)[1]
+      end
+    end
+    [current_lowest, lowest_team, week]
+  end
 
   def current_year
     Time.now.year
   end
 
-  def qb_count(year=current_year)
-    self.roster_counts.find_by(:year => year).qb
+  def qb_count(year = current_year)
+    self.roster_counts.find_by(year: year).qb
   end
 
-  def rb_count(year=current_year)
-    self.roster_counts.find_by(:year => year).rb
+  def rb_count(year = current_year)
+    self.roster_counts.find_by(year: year).rb
   end
 
-  def wr_count(year=current_year)
-    self.roster_counts.find_by(:year => year).wr
+  def wr_count(year = current_year)
+    self.roster_counts.find_by(year: year).wr
   end
 
-  def te_count(year=current_year)
-    self.roster_counts.find_by(:year => year).te
+  def te_count(year = current_year)
+    self.roster_counts.find_by(year: year).te
   end
 
-  def k_count(year=current_year)
-    self.roster_counts.find_by(:year => year).k
+  def k_count(year = current_year)
+    self.roster_counts.find_by(year: year).k
   end
 
-  def d_st_count(year=current_year)
-    self.roster_counts.find_by(:year => year).d_st
+  def d_st_count(year = current_year)
+    self.roster_counts.find_by(year: year).d_st
   end
 
-  def lb_count(year=current_year)
-    self.roster_counts.find_by(:year => year).lb
+  def lb_count(year = current_year)
+    self.roster_counts.find_by(year: year).lb
   end
 
-  def db_count(year=current_year)
-    self.roster_counts.find_by(:year => year).db
+  def db_count(year = current_year)
+    self.roster_counts.find_by(year: year).db
   end
 
-  def dl_count(year=current_year)
-    self.roster_counts.find_by(:year => year).dl
+  def dl_count(year = current_year)
+    self.roster_counts.find_by(year: year).dl
   end
 
-  def flex_count(year=current_year)
-    self.roster_counts.find_by(:year => year).flex
+  def flex_count(year = current_year)
+    self.roster_counts.find_by(year: year).flex
   end
 
-  def dt_count(year=current_year)
-    self.roster_counts.find_by(:year => year).dt
+  def dt_count(year = current_year)
+    self.roster_counts.find_by(year: year).dt
   end
 
-  def de_count(year=current_year)
-    self.roster_counts.find_by(:year => year).de
+  def de_count(year = current_year)
+    self.roster_counts.find_by(year: year).de
   end
 
-  def cb_count(year=current_year)
-    self.roster_counts.find_by(:year => year).cb
+  def cb_count(year = current_year)
+    self.roster_counts.find_by(year: year).cb
   end
 
-  def s_count(year=current_year)
-    self.roster_counts.find_by(:year => year).s
+  def s_count(year = current_year)
+    self.roster_counts.find_by(year: year).s
   end
 
 end
