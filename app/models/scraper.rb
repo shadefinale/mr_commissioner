@@ -39,7 +39,7 @@ class Scraper
   def get_points
 
     1.upto(matchup_count).each do |w|
-      week = get_week(w)
+      week = Week.find_by(number: w, year: @season)
       1.upto(@team_count).each do |e|
         page = @agent.get(scoreboard_page(e, w, 2014))
         team = get_team(e)
@@ -57,7 +57,7 @@ class Scraper
   end
 
   def points(row)
-    points = row.children[-1].text.to_f
+    row.children[-1].text.to_f
   end
 
 
@@ -70,11 +70,6 @@ class Scraper
     name = row.children[1].text.split(',')[0]
     Player.find_or_create_by(name: name, position: position)
   end
-
-  def get_week(w)
-    Week.find_or_create_by(number: w, year: @season)
-  end
-
 
   def initialize_league_settings
     #scrape_league_base_page # Does the league exist

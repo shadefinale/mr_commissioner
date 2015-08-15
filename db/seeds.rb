@@ -13,5 +13,12 @@ PlayerScore.destroy_all
 Week.destroy_all
 
 
+2000.upto(2100).each do |year|
+  1.upto(17).each do |week|
+    Week.create(number: week, year: year)
+  end
+end
+
 s = Scraper.new(143124, 2014)
 s.scrape_all
+
