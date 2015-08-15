@@ -13,10 +13,10 @@
       </li>
 
       <li class="sub-menu">
-        <a class="active" href="javascript:;" >
+        <%= link_to leagues_path, class: controller.class == LeaguesController ? 'active' : '' do %>
           <i class="fa fa-th"></i>
-          <span>Data Tables</span>
-        </a>
+          <span>League Stats</span>
+        <% end -%>
       </li>
 
       <li class="sub-menu">

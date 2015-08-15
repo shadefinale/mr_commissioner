@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150814180810) do
+ActiveRecord::Schema.define(version: 20150815014735) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,14 @@ ActiveRecord::Schema.define(version: 20150814180810) do
   create_table "leagues", force: :cascade do |t|
     t.string "name"
   end
+
+  create_table "leagues_users", id: false, force: :cascade do |t|
+    t.integer "user_id",   null: false
+    t.integer "league_id", null: false
+  end
+
+  add_index "leagues_users", ["league_id"], name: "index_leagues_users_on_league_id", using: :btree
+  add_index "leagues_users", ["user_id"], name: "index_leagues_users_on_user_id", using: :btree
 
   create_table "player_scores", force: :cascade do |t|
     t.integer "player_id"
@@ -57,9 +65,20 @@ ActiveRecord::Schema.define(version: 20150814180810) do
   create_table "teams", force: :cascade do |t|
     t.string  "name"
     t.integer "league_id"
+    t.integer "espn_id"
   end
 
   add_index "teams", ["league_id"], name: "index_teams_on_league_id", using: :btree
+
+  create_table "users", force: :cascade do |t|
+    t.string   "username",        null: false
+    t.string   "password_digest", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "auth_token"
+  end
+
+  add_index "users", ["auth_token"], name: "index_users_on_auth_token", unique: true, using: :btree
 
   create_table "weeks", force: :cascade do |t|
     t.integer "year"
