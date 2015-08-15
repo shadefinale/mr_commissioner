@@ -5,3 +5,13 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+League.destroy_all
+Player.destroy_all
+Team.destroy_all
+PlayerScore.destroy_all
+Week.destroy_all
+
+
+s = Scraper.new(143124, 2014)
+s.scrape_all

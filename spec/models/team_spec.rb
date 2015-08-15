@@ -17,6 +17,8 @@ RSpec.describe Team, type: :model do
       expect(team.name).not_to be_nil
     end
 
+    it "returns the score for the team of the given week"
+
   end
 
 end
