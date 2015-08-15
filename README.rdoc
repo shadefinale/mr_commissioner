@@ -1,11 +1,12 @@
 League Stats
-
+------------
 Best Season Total (Team, Total)
 Best Individual Score (Team, Score, Week)
 Worst Season Total (Team, Total)
 Worst Individual Score (Team, Score, Week)
 
 Team Stats
+----------
 All Play Record by Week (Team, Record, Week)
 All Play Record by Season (Team, Record, Win Percentage)
 Actual Record vs All Play Record
