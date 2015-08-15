@@ -6,4 +6,8 @@ class PlayerScore < ActiveRecord::Base
   def league
     self.team.league
   end
+
+  def season
+    self.week.year
+  end
 end

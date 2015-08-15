@@ -1,28 +1,11 @@
-== README
+League Stats
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Best Season Total (Team, Total)
+Best Individual Score (Team, Score, Week)
+Worst Season Total (Team, Total)
+Worst Individual Score (Team, Score, Week)
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Team Stats
+All Play Record by Week (Team, Record, Week)
+All Play Record by Season (Team, Record, Win Percentage)
+Actual Record vs All Play Record
