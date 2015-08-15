@@ -15,8 +15,3 @@
 //= require turbolinks
 //= require_tree .
 
-//custom select box
-
-$(function(){
-    $('select.styled').customSelect();
-});
