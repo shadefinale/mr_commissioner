@@ -3,6 +3,67 @@ class League < ActiveRecord::Base
   has_many :teams
   has_many :roster_counts
 
+
+  def team_count
+    self.teams.count
+  end
+
+  def highest_season_total(season=2014)
+    current_highest = 0
+    highest_team = nil
+
+    teams.each do |team|
+      if team.season_total(season) > current_highest
+        current_highest = team.season_total(season)
+        highest_team = team
+      end
+    end
+    [current_highest, highest_team]
+  end
+
+  def lowest_season_total(season=2014)
+    current_lowest = 10000000000000
+    lowest_team = nil
+
+    teams.each do |team|
+      if team.season_total(season) < current_lowest
+        current_lowest = team.season_total(season)
+        lowest_team = team
+      end
+    end
+    [current_lowest, lowest_team]
+  end
+
+  def best_week(season=2014)
+    current_highest = 0
+    highest_team = nil
+    week = 0
+
+    teams.each do |team|
+      if team.best_week(season)[0] > current_highest
+        current_highest = team.best_week(season)[0]
+        highest_team = team
+        week = team.best_week(season)[1]
+      end
+    end
+    [current_highest, highest_team, week]
+  end
+
+  # def best_week(season=2014)
+  #   current_highest = 0
+  #   highest_team = nil
+  #   week = 0
+
+  #   teams.each do |team|
+  #     if team.best_week(season)[0] > current_highest
+  #       current_highest = team.best_week(season)[0]
+  #       highest_team = team
+  #       week = team.best_week(season)[1]
+  #     end
+  #   end
+  #   [current_highest, highest_team, week]
+  # end
+
   def current_year
     Time.now.year
   end

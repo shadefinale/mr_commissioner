@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Team, type: :model do
   let(:league){create(:league)}
-  let(:team){create(:team)}
+  let(:player_score){create(:player_score)}
+  let(:team){player_score.team}
 
   context "associations" do
 
@@ -17,7 +18,11 @@ RSpec.describe Team, type: :model do
       expect(team.name).not_to be_nil
     end
 
-    it "returns the score for the team of the given week"
+    it "returns the score for the team of the given week" do
+      expect(team.weekly_scores(1, 2015)).to eq(100.0)
+    end
+
+    it "shows the sum of all scores in a given season"
 
   end
 

@@ -22,6 +22,9 @@ class Scraper
     @agent.history_added = Proc.new { sleep 0.1 }
     @league_id = league_id.to_i
     @season = season
+    16.times do |n|
+      Week.find_or_create_by(:number => n, :year => season)
+    end
 
     initialize_league_settings unless League.find_by_id(league_id)
 

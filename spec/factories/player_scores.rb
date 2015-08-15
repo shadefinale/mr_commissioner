@@ -3,7 +3,7 @@ FactoryGirl.define do
     player
     week
     starter :true
-    points 100
+    points 100.0
     team
   end
 
