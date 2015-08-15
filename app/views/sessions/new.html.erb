@@ -1,13 +1,7 @@
 <div>
   <div class="container">
 
-    <form class="form-login" action="index.html">
-      <h2 class="form-login-heading">search for league</h2>
-      <div class="login-wrap">
-        <input type="text" class="form-control" placeholder="LEAGUE ID" autofocus>
-      </div>
-
-    </form>
+    <%= render partial: "shared/leagueidform" %>
 
     <%= form_tag session_path, class: "form-login", id: "sign-in-form" do %>
       <h2 class="form-login-heading">sign in now</h2>

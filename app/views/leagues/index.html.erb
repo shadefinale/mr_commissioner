@@ -1,0 +1,32 @@
+<section id="main-content">
+  <section class="wrapper">
+    <h3><i class="fa fa-angle-right"></i> Leagues followed by <%= current_user.username %></h3>
+    <div class="row">
+
+      <div class="col-md-12 mt">
+        <div class="content-panel">
+          <table class="table table-hover">
+            <h4><i class="fa fa-angle-right"></i> Hover Table</h4>
+            <hr>
+            <thead>
+              <tr>
+                <th><i class="fa fa-bullhorn"></i> Category</th>
+                <th><i class="fa fa-question-circle"></i> Data</th>
+              </tr>
+            </thead>
+            <% @leagues.each do |league| %>
+	            <tbody>
+	              <tr>
+	                <td><%= link_to league.name, league %></td>
+	                <td>Remove</td>
+	              </tr>
+	            </tbody>
+            <% end %>
+          </table>
+          <%= render partial: "shared/leagueidform" %>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
