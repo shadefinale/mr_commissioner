@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :redirect_to_dashboard, only: [:new, :create]
 
   layout 'login'
 
@@ -49,9 +50,9 @@ class UsersController < ApplicationController
 
   private
 
-  def user_params
-    params.require(:user).permit( :username,
-                                  :password,
-                                  :password_confirmation)
-  end
+    def user_params
+      params.require(:user).permit( :username,
+                                    :password,
+                                    :password_confirmation)
+    end
 end
