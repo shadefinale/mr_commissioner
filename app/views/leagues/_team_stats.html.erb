@@ -3,7 +3,7 @@
   <div class="col-md-12 mt">
     <div class="content-panel">
 
-      <h4><i class="fa fa-angle-right"></i> Team Stats for <%= team.name %></h4>
+      <h4><i class="fa fa-angle-right"></i> Team Stats for <%= team.name %>  (<%= team.actual_record %>)</h4>
       <hr>
 
       <div class="row">
@@ -56,6 +56,25 @@
               <tr>
                 <td><%= team.all_play_by_season_record %></td>
                 <td><%= team.all_play_by_season_percentage %></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <br><br>
+
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th><i class="fa fa-bullhorn"></i> All Play Wins / Total Matchs</th>
+                <th><i class="fa fa-bullhorn"></i> Wins Over Average</th>
+                <th><i class="fa fa-bullhorn"></i> "Luck" Factor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><%= team.average_all_play_wins %></td>
+                <td><%= team.wins_over_average %></td>
+                <td><%= team.luck_factor(team.wins_over_average) %></td>
               </tr>
             </tbody>
           </table>

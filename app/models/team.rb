@@ -100,20 +100,43 @@ class Team < ActiveRecord::Base
   end
 
   def actual_record(season = 2014)
-    record = self.records.where(year: season)
+    record = self.records.find_by(year: season)
     "#{record.wins}-#{record.losses}-#{record.ties}"
   end
 
   def actual_wins(season = 2014)
-    self.records.where(year: season).wins
+    self.records.find_by(year: season).wins
   end
 
   def average_all_play_wins(season=2014)
-    (self.all_play_season_wins.to_f / self.matchup_count(season)).round
+    (self.all_play_by_season_wins.to_f / self.matchup_count(season)).round
   end
 
   def wins_over_average(season = 2014)
     actual_wins(season) - average_all_play_wins(season)
+  end
+
+  # 'Luck' Factor
+
+  def luck_factor(wins_over_average)
+    case wins_over_average
+    when 3..100
+      "Super Lucky"
+    when 2
+      "Very Lucky"
+    when 1
+      "Lucky"
+    when 0
+      "No Luck"
+    when -1
+      "Unlucky"
+    when -2
+      "Very Unlucky"
+    when -100..-3
+      "Super Unlucky"
+    else
+      "NaN"
+    end
   end
 
 

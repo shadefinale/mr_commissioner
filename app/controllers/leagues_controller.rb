@@ -15,6 +15,7 @@ class LeaguesController < ApplicationController
       league = League.find_by("id = ?", params[:id])
       if league
         current_user.leagues << league if current_user && !(current_user.leagues.include?(league))
+        notify_user(current_user.id, league.id)
         redirect_to league
       else
         scrape_new_league(params[:id])
@@ -46,6 +47,10 @@ class LeaguesController < ApplicationController
         flash[:notice] = 'The specified league could not be found.'
         redirect_to signin_path
       end
+    end
+
+    def notify_user(user_id, league_id)
+      User.notify_about_results(user_id, league_id)
     end
 
 end
