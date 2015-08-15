@@ -4,5 +4,6 @@
     <a href="#" class="go-top">
         <i class="fa fa-angle-up"></i>
     </a>
+    Page Rendered in <%= sprintf('%.3f', (Time.now.usec - @start_time).abs / 1000000.0) %> seconds
   </div>
 </footer>
