@@ -68,5 +68,19 @@ RSpec.describe User, type: :model do
 
   end
 
+  context 'associations' do
+
+    it 'should respond to leagues' do
+      expect(user).to respond_to(:leagues)
+    end
+
+    it 'should properly store and return leagues' do
+      new_league = create(:league)
+      user.leagues << new_league
+      expect(user.leagues.first).to eq(new_league)
+    end
+
+  end
+
 
 end
