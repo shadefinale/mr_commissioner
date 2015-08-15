@@ -8,21 +8,19 @@ class Scraper
     @agent.history_added = Proc.new { sleep 0.1 }
     @league_id = league_id.to_i
     @season = season
-    16.times do |n|
-      Week.find_or_create_by(:number => n+1, :year => season)
-    end
-
-    initialize_league_settings unless League.find_by_id(league_id)
-
-
-
   end
 
   def scrape_all
-    t = Time.now
-    # week by week scraper
-    get_points
-    p Time.now - t
+    ActiveRecord::Base.transaction do
+      16.times do |n|
+        Week.find_or_create_by(:number => n+1, :year => @season)
+      end
+
+      initialize_league_settings unless League.find_by_id(@league_id)
+
+      get_points
+    end
+
   end
 
   def get_points
@@ -31,7 +29,8 @@ class Scraper
       week = get_week(w)
       1.upto(@team_count).each do |e|
         page = @agent.get(scoreboard_page(e, w, 2014))
-        team = get_team(e)
+        name = page.parser.css('.playerTableBgRowHead')[0].text.to_s[0..-11]
+        team = get_team(e, name)
         results = page.parser.css('.pncPlayerRow')
         starter_count.times do |player|
           row = results[player]
@@ -50,8 +49,10 @@ class Scraper
   end
 
 
-  def get_team(espn_id)
-    Team.find_or_create_by(espn_id: espn_id, league_id: @league_id)
+  def get_team(espn_id, name)
+    target = Team.find_or_create_by(espn_id: espn_id, league_id: @league_id)
+    target.update(name: name)
+    target
   end
 
   def get_player(row)
