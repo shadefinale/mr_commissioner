@@ -49,7 +49,7 @@ class Team < ActiveRecord::Base
   def all_play_by_season_wins(season=2014)
     wins = 0
     matchup_count.times do |w|
-      wins += all_play_by_week(w, season)
+      wins += all_play_by_week_wins(w + 1, season)
     end
     wins
   end
@@ -64,8 +64,8 @@ class Team < ActiveRecord::Base
 
   def all_play_by_season_losses(season=2014)
     losses = 0
-    matchup_count.times.times do |w|
-      losses += all_play_by_week(w, season)
+    matchup_count.times do |w|
+      losses += all_play_by_week_losses(w + 1, season)
     end
     losses
   end
@@ -77,8 +77,20 @@ class Team < ActiveRecord::Base
     "#{wins}-#{losses}-#{ties}"
   end
 
-  def all_play_by_week_percentage(week, season=2014)
-    (all_play_by_week_wins(week, season).to_f / all_play_by_week_losses(week, season)).round(3)
+  def all_play_by_season_record(season=2014)
+    wins = all_play_by_season_wins(season)
+    losses = all_play_by_season_losses(season)
+    ties = ((self.league.teams.count-1) * (self.league.roster_counts.first.matchup_count)) - (wins + losses)
+    "#{wins}-#{losses}-#{ties}"
   end
+
+  def all_play_by_week_percentage(week, season=2014)
+    (all_play_by_week_wins(week, season).to_f / (self.league.teams.count - 1)).round(3)
+  end
+
+  def all_play_by_season_percentage(season=2014)
+    (all_play_by_season_wins(season).to_f / ((self.league.teams.count - 1) * self.league.roster_counts.first.matchup_count)).round(3)
+  end
+
 
 end

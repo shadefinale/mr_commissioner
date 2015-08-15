@@ -8,6 +8,32 @@ class League < ActiveRecord::Base
     self.teams.count
   end
 
+  def best_all_play_record(season = 2014)
+    current_best = 0
+    best_team = nil
+
+    teams.each do |team|
+      if team.all_play_by_season_percentage(season) > current_best
+        current_best = team.all_play_by_season_percentage(season)
+        best_team = team
+      end
+    end
+    [current_best, best_team.name]
+  end
+
+  def worst_all_play_record(season = 2014)
+    current_worst = 2
+    worst_team = nil
+
+    teams.each do |team|
+      if team.all_play_by_season_percentage(season) < current_worst
+        current_worst = team.all_play_by_season_percentage(season)
+        worst_team = team
+      end
+    end
+    [current_worst, worst_team.name]
+  end
+
   def highest_season_total(season=2014)
     current_highest = 0
     highest_team = nil
@@ -18,7 +44,7 @@ class League < ActiveRecord::Base
         highest_team = team
       end
     end
-    [current_highest, highest_team]
+    [current_highest, highest_team.name]
   end
 
   def lowest_season_total(season=2014)
@@ -31,7 +57,7 @@ class League < ActiveRecord::Base
         lowest_team = team
       end
     end
-    [current_lowest, lowest_team]
+    [current_lowest, lowest_team.name]
   end
 
   def best_week(season=2014)
@@ -46,7 +72,7 @@ class League < ActiveRecord::Base
         week = team.best_week(season)[1]
       end
     end
-    [current_highest, highest_team, week]
+    [current_highest, highest_team.name, week]
   end
 
   def worst_week(season = 2014)
@@ -61,7 +87,7 @@ class League < ActiveRecord::Base
         week = team.worst_week(season)[1]
       end
     end
-    [current_lowest, lowest_team, week]
+    [current_lowest, lowest_team.name, week]
   end
 
   def current_year
