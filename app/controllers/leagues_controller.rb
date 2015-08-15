@@ -15,7 +15,7 @@ class LeaguesController < ApplicationController
       league = League.find_by("id = ?", params[:id])
       if league
         current_user.leagues << league if current_user && !(current_user.leagues.include?(league))
-        notify_user(current_user.id, league.id)
+        notify_user(current_user.id, league.id) if current_user
         redirect_to league
       else
         scrape_new_league(params[:id])
