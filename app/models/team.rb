@@ -49,7 +49,7 @@ class Team < ActiveRecord::Base
   def all_play_by_season_wins(season=2014)
     wins = 0
     matchup_count.times do |w|
-      wins += all_play_by_week(w, season)
+      wins += all_play_by_week_wins(w + 1, season)
     end
     wins
   end
@@ -64,8 +64,8 @@ class Team < ActiveRecord::Base
 
   def all_play_by_season_losses(season=2014)
     losses = 0
-    matchup_count.times.times do |w|
-      losses += all_play_by_week(w, season)
+    matchup_count.times do |w|
+      losses += all_play_by_week_losses(w + 1, season)
     end
     losses
   end
