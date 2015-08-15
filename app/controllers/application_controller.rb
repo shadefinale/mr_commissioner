@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :check_for_expired_user
+  before_action :set_start_time
 
   private
 
@@ -62,6 +63,10 @@ class ApplicationController < ActionController::Base
 
   def check_for_expired_user
     sign_out if current_user.nil? && cookies[:auth_token]
+  end
+
+  def set_start_time
+    @start_time = Time.now.usec
   end
 
 end

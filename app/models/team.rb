@@ -3,39 +3,45 @@ class Team < ActiveRecord::Base
   belongs_to :league
 
   def weekly_scores(week, season=2014)
-    self.player_scores.where(:week_id => get_week_id(week, season)).sum(:points)
-  end
-
-  def get_week_id(week, season)
-    Week.find_by(:number => week, :year => season).id
+    # self.player_scores.where(:week_id => get_week_id(week, season)).sum(:points)
+    PlayerScore.joins(:week).where("team_id = ? AND weeks.year = ? AND weeks.number = ?", self.id, season, week).sum(:points)
   end
 
   def best_week(season=2014)
-    score = self.get_all_scores(season).transpose[0].max
-    week = self.get_all_scores(season).transpose[0].index(score) + 1
-    [score, week]
+    week = PlayerScore.joins(:week)
+    .select("weeks.number, SUM(player_scores.points) as points")
+    .where("team_id = ? AND weeks.year = ?", self.id, season)
+    .group("player_scores.week_id, weeks.number")
+    .order("points DESC")
+    .first
+
+    [week.points, week.number]
   end
 
   def worst_week(season=2014)
-    score = self.get_all_scores(season).transpose[0].min
-    week = self.get_all_scores(season).transpose[0].index(score) + 1
-    [score, week]
+    week = PlayerScore.joins(:week)
+    .select("weeks.number, SUM(player_scores.points) as points")
+    .where("team_id = ? AND weeks.year = ?", self.id, season)
+    .group("player_scores.week_id, weeks.number")
+    .order("points")
+    .first
+
+    [week.points, week.number]
   end
 
-  def get_all_scores(season=2014)
-    all_scores = []
-    matchup_count.times do |n|
-      all_scores << [self.weekly_scores(n+1, season), n+1]
-    end
-    all_scores
-  end
+  # def get_all_scores(season=2014)
+  #   PlayerScore.joins(:week)
+  #   .select("SUM(player_scores.points) as points")
+  #   .where("team_id = ? AND weeks.year = ?", self.id, season)
+  #   .group("player_scores.week_id")
+  # end
 
   def matchup_count(season = 2014)
     self.league.roster_counts.find_by(year: season).matchup_count
   end
 
   def season_total(season=2014)
-    self.get_all_scores(season).transpose[0].sum
+    PlayerScore.joins(:week).where("team_id = ? AND weeks.year = ?", self.id, season).sum(:points)
   end
 
   def all_play_by_week_wins(week, season=2014)
