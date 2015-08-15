@@ -24,10 +24,14 @@ class Team < ActiveRecord::Base
 
   def get_all_scores(season=2014)
     all_scores = []
-    16.times do |n|
+    matchup_count.times do |n|
       all_scores << [self.weekly_scores(n+1, season), n+1]
     end
     all_scores
+  end
+
+  def matchup_count(season = 2014)
+    self.league.roster_counts.find_by(year: season).matchup_count
   end
 
   def season_total(season=2014)
@@ -44,7 +48,7 @@ class Team < ActiveRecord::Base
 
   def all_play_by_season_wins(season=2014)
     wins = 0
-    16.times do |w|
+    matchup_count.times do |w|
       wins += all_play_by_week(w, season)
     end
     wins
@@ -60,7 +64,7 @@ class Team < ActiveRecord::Base
 
   def all_play_by_season_losses(season=2014)
     losses = 0
-    16.times do |w|
+    matchup_count.times.times do |w|
       losses += all_play_by_week(w, season)
     end
     losses
