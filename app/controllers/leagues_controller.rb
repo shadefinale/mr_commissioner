@@ -39,10 +39,10 @@ class LeaguesController < ApplicationController
     def scrape_new_league(id)
       begin
         Scraper.new(id, 2014).scrape_all
-        current_user.leagues << league if current_user && !(current_user.leagues.include?(league))
+        current_user.leagues << League.last if current_user && !(current_user.leagues.include?(League.last))
         render :show, League.last
       rescue
-        flash[:notice] = 'The specified league does not exist.'
+        flash[:notice] = 'The specified league could not be found.'
         redirect_to signin_path
       end
     end
