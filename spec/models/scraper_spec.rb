@@ -18,9 +18,6 @@ describe Scraper do
       expect { Scraper.new('143a124') }.to raise_error
     end
 
-    it 'should raise error if league not found' do
-      expect { Scraper.new('999999999') }.to raise_error(NoMethodError)
-    end
 
     it 'should say league 143124 has 12 teams' do
       expect(Scraper.new(143_124).team_count).to eq(12)
@@ -47,13 +44,6 @@ describe Scraper do
   end
 
   describe '#settings_page' do
-    it 'gives the settings page for the given league' do
-      heinbeil_league_scraper = Scraper.new(143_124)
-      expect(heinbeil_league_scraper.settings_page)
-        .to eq(
-          'http://games.espn.go.com/ffl/leaguesetup/settings?leagueId=143124'
-        )
-    end
 
     it "should find the right league name" do
       heinbeil_league_scraper = Scraper.new(143_124)
@@ -130,6 +120,12 @@ describe Scraper do
     it "should find the kicker count" do
       heinbeil_league_scraper = Scraper.new(123_123)
       expect(heinbeil_league_scraper.k_count)
+        .to eq(1)
+    end
+
+    it "should find the kicker count" do
+      heinbeil_league_scraper = Scraper.new(123_123)
+      expect(heinbeil_league_scraper.d_st_count)
         .to eq(1)
     end
 
