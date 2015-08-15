@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :leagues, only: [:show]
+  resources :leagues
 
   resource :session, :only => [:new, :create, :destroy]
   resources :users, except: [:index]
