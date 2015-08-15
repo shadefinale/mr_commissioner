@@ -57,7 +57,7 @@ class Scraper
   end
 
   def points(row)
-    points = row.children[-1]
+    points = row.children[-1].text.to_f
   end
 
 
