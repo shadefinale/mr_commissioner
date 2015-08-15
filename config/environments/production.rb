@@ -28,6 +28,20 @@ Rails.application.configure do
   config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
 
+  config.action_mailer.default_url_options = { :host => 'mrcommissioner.com' }
+
+  config.action_mailer.smtp_settings = {
+      :address              => "smtp.gmail.com",
+      :port                 => '587',
+      :domain               => "gmail.com",
+      :user_name            => ENV['GMAIL_USERNAME'],
+      :password             => ENV['GMAIL_PASSWORD'],
+      :authentication       => :plain,
+      :enable_starttls_auto => true
+  }
+
+  config.action_mailer.delivery_method ||= :smtp
+
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
 
