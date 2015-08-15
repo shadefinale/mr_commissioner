@@ -20,7 +20,10 @@ describe Scraper do
 
 
     it 'should say league 143124 has 12 teams' do
-      expect(Scraper.new(143_124).team_count).to eq(12)
+      s = Scraper.new(143_124)
+      allow(s).to receive(:get_points) { true }
+      s.scrape_all
+      expect(s.team_count).to eq(12)
     end
   end
 
