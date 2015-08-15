@@ -1,7 +1,10 @@
 class LeaguesController < ApplicationController
 
   def new
-    #form to submit league_id for scraper
+    @league = League.new
+  end
+
+  def index
   end
 
   def create
@@ -12,6 +15,7 @@ class LeaguesController < ApplicationController
   end
 
   def show
+    @league = League.find(143124)
   end
 
 

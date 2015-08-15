@@ -1,5 +1,6 @@
 <div>
   <div class="container">
+
     <form class="form-login" action="index.html">
       <h2 class="form-login-heading">search for league</h2>
       <div class="login-wrap">
@@ -8,24 +9,26 @@
 
     </form>
 
-    <form class="form-login" action="index.html">
+    <%= form_tag session_path, class: "form-login", id: "sign-in-form" do %>
       <h2 class="form-login-heading">sign in now</h2>
+      <%= flash_messages %>
       <div class="login-wrap">
-        <input type="text" class="form-control" placeholder="User ID">
+        <%= text_field_tag :username, "", class: "form-control", placeholder: "Username" %>
         <br>
-        <input type="password" class="form-control" placeholder="Password">
+        <%= password_field_tag :password, "", class: "form-control", placeholder: "Password" %>
         <br>
-        <button class="btn btn-theme btn-block" href="index.html" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+        <%= button_tag class: "btn btn-theme btn-block", type: "submit" do %>
+          <i class="fa fa-lock"></i> SIGN IN
+        <% end -%>
         <hr>
 
         <div class="registration">
             Don't have an account yet?<br/>
-            <a class="" href="#">
-                Create an account
-            </a>
+            <%= link_to "Create an account", new_user_path %>
         </div>
       </div>
 
-    </form>
+    <% end -%>
+
   </div>
 </div>
