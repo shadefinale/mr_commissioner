@@ -21,7 +21,7 @@ class LeaguesController < ApplicationController
       end
     else
       flash[:notice] = 'The specified league does not exist.'
-      redirect_to leagues_path
+      redirect_to root_path
     end
   end
 
