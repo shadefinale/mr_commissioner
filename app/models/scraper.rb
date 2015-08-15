@@ -1,6 +1,9 @@
 # The scraper class is used to glean information from ESPN's fantasy leagues.
 class Scraper
-  attr_reader :team_count, :league_name, :qb_count, :rb_count, :wr_count,
+  attr_reader :team_count, :league_name, :matchup_count,
+              :qb_count,
+              :rb_count,
+              :wr_count,
               :te_count,
               :dt_count,
               :de_count,
@@ -18,8 +21,47 @@ class Scraper
     @agent.history_added = Proc.new { sleep 0.5 }
     @league_id = league_id.to_i
     @season = season
-    initialize_league_settings
+    initialize_league_settings unless League.find_by_id(league_id)
+
+    #week by week scraper
+    # get_points
+
+
   end
+
+  # def get_points
+
+  #   matchup_count.times do |w|
+  #     week = get_week(w)
+  #     @team_count.times do |e|
+  #       page = @agent.get(scoreboard_page(e+1, w+1, 2014))
+  #       get_team(e)
+  #       player = get_player
+  #       points = get_points
+  #       PlayerScore.new(week_id: week.id)
+
+
+  #   end
+  # end
+
+  def get_points
+    #scrape for points
+  end
+
+
+  def get_team(espn_id)
+    Team.find_or_create_by(espn_id: espn_id, league_id: @league_id)
+  end
+
+  def get_player
+    # scrape for player & position
+    Player.find_or_create_by(name: name, position: position)
+  end
+
+  def get_week(w)
+    Week.find_or_create_by(number: w, year: @season)
+  end
+
 
   def initialize_league_settings
     # scrape_league_base_page # Does the league exist
@@ -41,6 +83,8 @@ class Scraper
     table = page.parser.css('.viewable .leagueSettingsTable.tableBody').text
 
     extract_starter_counts(table)
+
+    @matchup_count = page.parser.css('.viewable')[32].text.to_i
     # Populate roster counts table
     # Table is on this page has css path
     # settings-content > div:nth-child(2) > table > tbody > tr.rowOdd > td:nth-child(2) > table
@@ -90,6 +134,15 @@ class Scraper
     "leagueId=#{@league_id}"\
     "teamId=#{team_num}&"\
     "seasonId=#{@season}"
+  end
+
+  def scoreboard_page(team_id, week, season)
+    "http://games.espn.go.com/ffl/boxscorequick?"\
+    "leagueId=#{@league_id}"\
+    "&teamId=#{team_id}"\
+    "&scoringPeriodId=#{week}"\
+    "&seasonId=#{season}"\
+    "&view=scoringperiod&version=quick"
   end
 
   def base_page
