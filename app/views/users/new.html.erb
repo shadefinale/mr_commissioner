@@ -1,7 +1,7 @@
 <div>
   <div class="container">
 
-    <%= form_for @user, class: "form-login", id: "sign-in-form" do |user_fields| %>
+    <%= form_for @user, html: {class: "form-login", id: "sign-in-form"} do |user_fields| %>
       <h2 class="form-login-heading">sign up</h2>
       <%= flash_messages %>
       <div class="login-wrap">

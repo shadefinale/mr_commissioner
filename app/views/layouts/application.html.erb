@@ -13,11 +13,12 @@
 
     <%= render partial: 'shared/sidebar' %>
 
-    <div>
+    <section id="main-content">
+      <section class="wrapper">
       <%= flash_messages %>
-    </div>
-
-    <%= yield %>
+      <%= yield %>
+      </section>
+    </section>
 
     <%= render partial: 'shared/footer' %>
 
