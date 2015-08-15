@@ -7,7 +7,7 @@ class LeaguesController < ApplicationController
   # end
 
   def index
-    @leagues = current_user.leagues.all
+    @leagues = current_user.leagues
   end
 
   def create
@@ -15,10 +15,10 @@ class LeaguesController < ApplicationController
       league = League.find_by("id = ?", params[:id])
       if league
         current_user.leagues << league if current_user && !(current_user.leagues.include?(league))
+        redirect_to league
       else
         scrape_new_league(params[:id])
       end
-      redirect_to league
     else
       flash[:notice] = 'The specified league does not exist.'
       redirect_to leagues_path
