@@ -1,32 +1,16 @@
 <aside>
   <div id="sidebar"  class="nav-collapse ">
-    <!-- sidebar menu start-->
     <ul class="sidebar-menu" id="nav-accordion">
 
       <h5 class="centered">Navigation</h5>
 
-      <li class="mt">
-        <a href="index.html">
-          <i class="fa fa-dashboard"></i>
-          <span>Dashboard</span>
-        </a>
-      </li>
-
       <li class="sub-menu">
         <%= link_to leagues_path, class: controller.class == LeaguesController ? 'active' : '' do %>
-          <i class="fa fa-th"></i>
+          <i class="fa fa-bar-chart-o"></i>
           <span>League Stats</span>
         <% end -%>
       </li>
 
-      <li class="sub-menu">
-        <a href="javascript:;" >
-          <i class=" fa fa-bar-chart-o"></i>
-          <span>Charts</span>
-        </a>
-      </li>
-
     </ul>
-    <!-- sidebar menu end-->
   </div>
 </aside>
