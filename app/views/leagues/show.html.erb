@@ -17,13 +17,13 @@
         <tbody>
           <tr>
             <td>Best Season Total</td>
-            <td>Team 7</td>
-            <td>21</td>
+            <td><%= @league.highest_season_total[1] %></td>
+            <td><%= @league.highest_season_total[0] %></td>
           </tr>
           <tr>
             <td>Worst Season Total</td>
-            <td>Team 1</td>
-            <td>12</td>
+            <td><%= @league.lowest_season_total[1] %></td>
+            <td><%= @league.lowest_season_total[0] %></td>
           </tr>
         </tbody>
       </table>
@@ -40,15 +40,15 @@
         <tbody>
           <tr>
             <td>Best Individual Score</td>
-            <td>Team 7</td>
-            <td>21</td>
-            <td>11</td>
+            <td><%= @league.best_week[1] %></td>
+            <td><%= @league.best_week[0] %></td>
+            <td><%= @league.best_week[2] %></td>
           </tr>
           <tr>
             <td>Worst Individual Score</td>
-            <td>Team 1</td>
-            <td>12</td>
-            <td>1</td>
+            <td><%= @league.worst_week[1] %></td>
+            <td><%= @league.worst_week[0] %></td>
+            <td><%= @league.worst_week[2] %></td>
           </tr>
         </tbody>
       </table>
@@ -56,66 +56,4 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12 mt">
-    <div class="content-panel">
-
-      <h4><i class="fa fa-angle-right"></i> Team Stats</h4>
-      <hr>
-
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th><i class="fa fa-bullhorn"></i> Category</th>
-            <th><i class="fa fa-question-circle"></i> Team</th>
-            <th><i class="fa fa-calendar"></i> Week</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>All Play Record by week</td>
-            <td>Team 7</td>
-            <td>3</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th><i class="fa fa-bullhorn"></i> Category</th>
-            <th><i class="fa fa-question-circle"></i> Team</th>
-            <th><i class="fa fa-question-circle"></i> Record</th>
-            <th><i class="fa fa-calendar"></i> Win Percentage</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Best Individual Score</td>
-            <td>Team 7</td>
-            <td>2</td>
-            <td>87%</td>
-          </tr>
-        </tbody>
-      </table>
-
-
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th><i class="fa fa-bullhorn"></i> Actual Record</th>
-            <th><i class="fa fa-bullhorn"></i> All Play Record</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>2</td>
-            <td>2</td>
-          </tr>
-        </tbody>
-      </table>
-
-
-    </div>
-  </div>
-</div>
+<%= render partial: "leagues/team_stats" %>
