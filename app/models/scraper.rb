@@ -77,7 +77,7 @@ class Scraper
 
 
   def initialize_league_settings
-    scrape_league_base_page # Does the league exist
+    #scrape_league_base_page # Does the league exist
     scrape_league_settings_page # Get a count of teams
     # scrape_league_all_teams # For 1 up to count of teams, scrape team.
   end
