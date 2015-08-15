@@ -17,6 +17,19 @@ RSpec.describe LeaguesController, type: :controller do
       get :index
       expect(assigns(:leagues)).to match_array([new_league])
     end
+
+    it 'should not assign a league to a user more than once' do
+      new_user = create(:user)
+      allow(controller).to receive(:current_user) { new_user }
+
+      new_league = create(:league)
+      new_user.leagues << new_league
+
+      post :create, id: new_league.id
+
+      get :index
+      expect(assigns(:leagues)).to match_array([new_league])
+    end
   end
 
   context '#create' do

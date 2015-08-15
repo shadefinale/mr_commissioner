@@ -11,12 +11,17 @@ class LeaguesController < ApplicationController
   end
 
   def create
-    league = League.find_by("id = ?", params[:id])
-    if league
-      current_user.leagues << league if current_user
-      redirect_to league
+    if params[:id].to_i > 0 && params[:id].to_i < 2147483647
+      league = League.find_by("id = ?", params[:id])
+      if league
+        current_user.leagues << league if current_user && !(current_user.leagues.include?(league))
+        redirect_to league
+      else
+        scrape_new_league(params[:id])
+      end
     else
-      scrape_new_league(params[:id])
+      flash[:notice] = 'The specified league does not exist.'
+      redirect_to signin_path
     end
   end
 
@@ -34,11 +39,11 @@ class LeaguesController < ApplicationController
     def scrape_new_league(id)
       begin
         Scraper.new(id, 2014).scrape_all
-        current_user.leagues << League.last if current_user
+        current_user.leagues << league if current_user && !(current_user.leagues.include?(league))
         render :show, League.last
       rescue
         flash[:notice] = 'The specified league does not exist.'
-        render :new
+        redirect_to signin_path
       end
     end
 

@@ -10,7 +10,7 @@ class SessionsController < ApplicationController
     if @user && @user.authenticate(params[:password])
       permanent_sign_in(@user)
       flash[:success] = "You've successfully signed in"
-      redirect_to current_user
+      redirect_to leagues_path
     else
       flash.now[:error] = "Wrong username/password combination, please try again!"
       @user = User.new
