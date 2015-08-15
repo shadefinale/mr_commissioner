@@ -36,6 +36,11 @@ class Scraper
           row = results[player]
           player = get_player(row)
           points = points(row)
+          record_data = page.parser.css('.bodyCopy')[-2].text.split(": ")[-2].gsub("Standing", "").split("-")
+          wins = record_data[0].to_i
+          losses = record_data[1].to_i
+          ties = record_data[2].to_i
+          Record.find_or_create_by(team_id: team.id, year: @season, wins: wins, losses: losses, ties: ties)
           PlayerScore.create(week_id: week.id, team_id: team.id,
                           points: points, player_id: player.id,
                           starter: true)

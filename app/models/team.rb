@@ -1,6 +1,7 @@
 class Team < ActiveRecord::Base
   has_many :player_scores
   belongs_to :league
+  has_many :records
 
   def weekly_scores(week, season=2014)
     self.player_scores.where(:week_id => get_week_id(week, season)).sum(:points)
@@ -90,6 +91,23 @@ class Team < ActiveRecord::Base
 
   def all_play_by_season_percentage(season=2014)
     (all_play_by_season_wins(season).to_f / ((self.league.teams.count - 1) * self.league.roster_counts.first.matchup_count)).round(3)
+  end
+
+  def actual_record(season = 2014)
+    record = self.records.where(year: season)
+    "#{record.wins}-#{record.losses}-#{record.ties}"
+  end
+
+  def actual_wins(season = 2014)
+    self.records.where(year: season).wins
+  end
+
+  def average_all_play_wins(season=2014)
+    (self.all_play_season_wins.to_f / self.matchup_count(season)).round
+  end
+
+  def wins_over_average(season = 2014)
+    actual_wins(season) - average_all_play_wins(season)
   end
 
 
