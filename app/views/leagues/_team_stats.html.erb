@@ -1,0 +1,65 @@
+<% @league.teams.each do |team| %>
+<div class="row">
+  <div class="col-md-12 mt">
+    <div class="content-panel">
+
+      <h4><i class="fa fa-angle-right"></i> Team Stats for <%= team.name %></h4>
+      <hr>
+
+      <div class="row">
+        <div class="col-md-6">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th><i class="fa fa-calendar"></i> Week</th>
+                <th><i class="fa fa-bullhorn"></i> All Play Record</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @league.roster_counts.first.matchup_count.times do |week| %>
+              <tr>
+                <td>Week <%= week + 1 %></td>
+                <td><%= team.all_play_by_week_record(week+1) %></td>
+              </tr>
+              <% end -%>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="col-md-6">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th><i class="fa fa-calendar"></i> Week</th>
+                <th><i class="fa fa-bullhorn"></i> Best Individual Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Week <%= team.best_week[1] %></td>
+                <td><%= team.best_week[0] %></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th><i class="fa fa-bullhorn"></i> All Play Record</th>
+                <th><i class="fa fa-bullhorn"></i> All Play Percentage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><%= team.all_play_by_season_record %></td>
+                <td><%= team.all_play_by_season_percentage %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<% end -%>
