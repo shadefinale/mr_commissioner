@@ -1,20 +1,6 @@
 # The scraper class is used to glean information from ESPN's fantasy leagues.
 class Scraper
-  attr_reader :team_count, :league_name, :matchup_count,
-              :qb_count,
-              :rb_count,
-              :wr_count,
-              :te_count,
-              :dt_count,
-              :de_count,
-              :lb_count,
-              :dl_count,
-              :cb_count,
-              :s_count,
-              :db_count,
-              :d_st_count,
-              :k_count,
-              :flex_count
+  attr_reader :team_count, :league_name
 
   def initialize(league_id, season = DateTime.now.year)
     fail ArgumentError unless league_id.to_s =~ /^\d+$/
@@ -23,7 +9,7 @@ class Scraper
     @league_id = league_id.to_i
     @season = season
     16.times do |n|
-      Week.find_or_create_by(:number => n, :year => season)
+      Week.find_or_create_by(:number => n+1, :year => season)
     end
 
     initialize_league_settings unless League.find_by_id(league_id)
@@ -41,7 +27,7 @@ class Scraper
 
   def get_points
 
-    1.upto(matchup_count).each do |w|
+    1.upto(@matchup_count).each do |w|
       week = get_week(w)
       1.upto(@team_count).each do |e|
         page = @agent.get(scoreboard_page(e, w, 2014))
@@ -97,9 +83,9 @@ class Scraper
     @team_count = page.parser.css('.viewable')[1].text.to_i
 
     table = page.parser.css('.viewable .leagueSettingsTable.tableBody').text
-    extract_starter_counts(table)
-
     @matchup_count = page.parser.css('.viewable')[32].text.to_i
+
+    extract_starter_counts(table)
     # Populate roster counts table
     # Table is on this page has css path
     # settings-content > div:nth-child(2) > table > tbody > tr.rowOdd > td:nth-child(2) > table
@@ -122,6 +108,24 @@ class Scraper
     @k_count    = (table.match(/\(K\)\d/).to_s[-1]   || "0").to_i
     @d_st_count = (table.match(/\(D\/ST\)\d/).to_s[-1]   || "0").to_i
     @flex_count = (table.match(/Flex\D*\d/).to_s[-1] || "0").to_i
+
+    RosterCount.find_or_create_by(qb:   @qb_count,
+                                  rb:   @rb_count,
+                                  wr:   @wr_count,
+                                  te:   @te_count,
+                                  dt:   @dt_count,
+                                  de:   @de_count,
+                                  lb:   @lb_count,
+                                  dl:   @dl_count,
+                                  cb:   @cb_count,
+                                  s:    @s_count,
+                                  db:   @db_count,
+                                  k:    @k_count,
+                                  d_st: @d_st_count,
+                                  flex: @flex_count,
+                         matchup_count: @matchup_count,
+                                  year: @season,
+                             league_id: @league_id)
   end
 
   def scrape_league_all_teams
