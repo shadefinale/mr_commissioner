@@ -7,7 +7,7 @@ class LeaguesController < ApplicationController
   # end
 
   def index
-    @leagues = current_user.leagues.all
+    @leagues = current_user.leagues
   end
 
   def create

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resource :session, :only => [:new, :create, :destroy]
   resources :users, except: [:index]
+  resources :leagues_users, only: [:destroy]
 
   get "static_pages/login" => "static_pages#login"
   get "static_pages/table" => "static_pages#table"
