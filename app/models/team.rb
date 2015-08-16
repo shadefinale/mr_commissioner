@@ -52,7 +52,7 @@ class Team < ActiveRecord::Base
     .select("teams, SUM(player_scores.points)")
     .where("weeks.number = ? AND weeks.year = ?", week, season)
     .group("player_scores.week_id, teams")
-    .having("SUM(player_scores.points) > ?", self.weekly_scores(week, season)).length
+    .having("SUM(player_scores.points) < ?", self.weekly_scores(week, season)).length
   end
 
   def all_play_by_season_wins(season=2014)
