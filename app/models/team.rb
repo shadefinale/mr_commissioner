@@ -50,7 +50,7 @@ class Team < ActiveRecord::Base
   def all_play_by_week_wins(week, season=2014)
     PlayerScore.joins(:team).joins(:week)
     .select("teams, SUM(player_scores.points)")
-    .where("weeks.number = ? AND weeks.year = ?", week, season)
+    .where("league_id = ? AND weeks.number = ? AND weeks.year = ?", self.league.id ,week, season)
     .group("player_scores.week_id, teams")
     .having("SUM(player_scores.points) < ?", self.weekly_scores(week, season)).length
   end
@@ -66,7 +66,7 @@ class Team < ActiveRecord::Base
   def all_play_by_week_losses(week, season=2014)
     PlayerScore.joins(:team).joins(:week)
     .select("teams, SUM(player_scores.points)")
-    .where("weeks.number = ? AND weeks.year = ?", week, season)
+    .where("league_id = ? AND weeks.number = ? AND weeks.year = ?", self.league.id ,week, season)
     .group("player_scores.week_id, teams")
     .having("SUM(player_scores.points) > ?", self.weekly_scores(week, season)).length
   end
