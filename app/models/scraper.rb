@@ -18,16 +18,38 @@ class Scraper
 
       initialize_league_settings unless League.find_by_id(@league_id)
 
+      get_espn_ids
+
       get_points
     end
 
   end
 
+  def league_history_page
+    "http://games.espn.go.com/ffl/tools/finalstandings?"\
+    "leagueId=#{@league_id}&seasonId=#{@season}"
+  end
+
+  def get_espn_ids
+    page=@agent.get(league_history_page)
+
+    links = page.links_with :href => /teamId/
+    team_ids = []
+
+    links.each do |link|
+      team_id = link.href.scan(/teamId=\d+/)
+      team_ids << team_id.first.scan(/\d+\z/).first
+    end
+    p @team_ids = team_ids
+
+  end
+
   def get_points
+
 
     1.upto(@matchup_count).each do |w|
       week = get_week(w)
-      1.upto(@team_count).each do |e|
+      @team_ids.each do |e|
         page = @agent.get(scoreboard_page(e, w, 2014))
         name = page.parser.css('.playerTableBgRowHead')[0].text.to_s[0..-11]
         team = get_team(e, name)

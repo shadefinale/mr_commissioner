@@ -13,8 +13,9 @@ class League < ActiveRecord::Base
     best_team = nil
 
     teams.each do |team|
-      if team.all_play_by_season_percentage(season) > current_best
-        current_best = team.all_play_by_season_percentage(season)
+      percentage = team.all_play_by_season_percentage
+      if percentage > current_best
+        current_best = percentage
         best_team = team
       end
     end
@@ -26,8 +27,9 @@ class League < ActiveRecord::Base
     worst_team = nil
 
     teams.each do |team|
-      if team.all_play_by_season_percentage(season) < current_worst
-        current_worst = team.all_play_by_season_percentage(season)
+      percentage = team.all_play_by_season_percentage
+      if percentage < current_worst
+        current_worst = percentage
         worst_team = team
       end
     end
