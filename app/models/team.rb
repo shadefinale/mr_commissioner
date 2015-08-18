@@ -48,35 +48,93 @@ class Team < ActiveRecord::Base
 
 
   def all_play_by_week_wins(week, season=2014)
-    PlayerScore.joins(:team).joins(:week)
-    .select("teams, SUM(player_scores.points)")
-    .where("league_id = ? AND weeks.number = ? AND weeks.year = ?", self.league.id ,week, season)
-    .group("player_scores.week_id, teams")
-    .having("SUM(player_scores.points) < ?", self.weekly_scores(week, season)).length
+    query = <<-SQL
+    WITH weekly_points_table (team_id, max_points)
+    AS
+    (
+      SELECT teams.id, SUM(player_scores.points) as max_points
+      FROM player_scores
+      INNER JOIN weeks ON weeks.id = player_scores.week_id
+      INNER JOIN teams ON teams.id = player_scores.team_id
+      WHERE (team_id IN (?) AND weeks.number = ? and weeks.year = ?)
+      GROUP BY teams.id
+    )
+    SELECT COUNT(*) as wins
+    FROM weekly_points_table
+    WHERE max_points < (SELECT max_points
+      FROM weekly_points_table
+      WHERE team_id = ?
+    )
+    SQL
+
+    (PlayerScore.find_by_sql [query, self.league.team_ids, week, season, self.id])[0].wins
   end
 
   def all_play_by_season_wins(season=2014)
-    wins = 0
-    matchup_count.times do |w|
-      wins += all_play_by_week_wins(w + 1, season)
-    end
-    wins
+    query = <<-SQL
+    WITH weekly_points_table (team_id, week_id, max_points)
+    AS
+    (
+      SELECT teams.id, weeks.id as week_id, SUM(player_scores.points) as max_points
+      FROM player_scores
+      INNER JOIN weeks ON weeks.id = player_scores.week_id
+      INNER JOIN teams ON teams.id = player_scores.team_id
+      WHERE (team_id IN (?) AND weeks.year = ?)
+      GROUP BY teams.id, weeks.id
+    )
+    SELECT COUNT(*) as season_wins
+    FROM weekly_points_table AS x
+    WHERE x.max_points < (SELECT max_points
+      FROM weekly_points_table
+      WHERE team_id = ? AND x.week_id = weekly_points_table.week_id
+    )
+    SQL
+    (PlayerScore.find_by_sql [query, self.league.team_ids, season, self.id])[0].season_wins
   end
 
   def all_play_by_week_losses(week, season=2014)
-    PlayerScore.joins(:team).joins(:week)
-    .select("teams, SUM(player_scores.points)")
-    .where("league_id = ? AND weeks.number = ? AND weeks.year = ?", self.league.id ,week, season)
-    .group("player_scores.week_id, teams")
-    .having("SUM(player_scores.points) > ?", self.weekly_scores(week, season)).length
+    query = <<-SQL
+    WITH weekly_points_table (team_id, max_points)
+    AS
+    (
+      SELECT teams.id, SUM(player_scores.points) as max_points
+      FROM player_scores
+      INNER JOIN weeks ON weeks.id = player_scores.week_id
+      INNER JOIN teams ON teams.id = player_scores.team_id
+      WHERE (team_id IN (?) AND weeks.number = ? and weeks.year = ?)
+      GROUP BY teams.id
+    )
+    SELECT COUNT(*) as losses
+    FROM weekly_points_table
+    WHERE max_points > (SELECT max_points
+      FROM weekly_points_table
+      WHERE team_id = ?
+    )
+    SQL
+
+    (PlayerScore.find_by_sql [query, self.league.team_ids, week, season, self.id])[0].losses
   end
 
   def all_play_by_season_losses(season=2014)
-    losses = 0
-    matchup_count.times do |w|
-      losses += all_play_by_week_losses(w + 1, season)
-    end
-    losses
+    query = <<-SQL
+    WITH weekly_points_table (team_id, week_id, max_points)
+    AS
+    (
+      SELECT teams.id, weeks.id as week_id, SUM(player_scores.points) as max_points
+      FROM player_scores
+      INNER JOIN weeks ON weeks.id = player_scores.week_id
+      INNER JOIN teams ON teams.id = player_scores.team_id
+      WHERE (team_id IN (?) AND weeks.year = ?)
+      GROUP BY teams.id, weeks.id
+    )
+    SELECT COUNT(*) as season_losses
+    FROM weekly_points_table AS x
+    WHERE x.max_points > (SELECT max_points
+      FROM weekly_points_table
+      WHERE team_id = ? AND x.week_id = weekly_points_table.week_id
+    )
+    SQL
+    (PlayerScore.find_by_sql [query, self.league.team_ids, season, self.id])[0].season_losses
   end
 
   def all_play_by_week_record(week, season=2014)
