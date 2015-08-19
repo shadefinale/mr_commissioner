@@ -9,14 +9,16 @@
 <body>
   <section id="container" >
 
-    <div id="sidebar"><%= render partial: 'shared/top_bar' %></div>
+    <%= render partial: 'shared/top_bar' %>
+
 
     <%= render partial: 'shared/sidebar' %>
 
+
     <section id="main-content">
       <section class="wrapper">
-      <%= flash_messages %>
-      <%= yield %>
+        <%= flash_messages %>
+        <%= yield %>
       </section>
     </section>
 
