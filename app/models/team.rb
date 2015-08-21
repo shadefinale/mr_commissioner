@@ -115,6 +115,64 @@ class Team < ActiveRecord::Base
     (PlayerScore.find_by_sql [query, self.league.team_ids, week, season, self.id])[0].losses
   end
 
+  def all_play_seasonal_record(season = 2014)
+    query = <<-SQL
+      SELECT (SUM(count(week_points < team_points OR NULL)) OVER (ORDER BY 1) :: integer) AS wins,
+             (SUM(count(week_points > team_points OR NULL)) OVER (ORDER BY 1) :: integer) AS losses,
+             (SUM(count(week_points = team_points OR NULL)) OVER (ORDER BY 1) :: integer) AS draws
+      --     , count(*) AS total -- redundant check
+      FROM (
+         SELECT week_id, team_id, sum(points) AS week_points
+              , first_value(sum(points)) OVER (PARTITION BY week_id
+                                               ORDER BY team_id <> ?) AS team_points
+         FROM  (SELECT id AS week_id FROM weeks WHERE year = ?) w  -- your year
+         CROSS  JOIN unnest(ARRAY[?]::int[]) t(team_id)  -- your teams, see below!
+         JOIN   player_scores p USING (week_id, team_id)
+         WHERE  EXISTS (  -- only weeks where the team actually played
+            SELECT 1 FROM player_scores
+            WHERE week_id = p.week_id
+            AND   team_id = ?
+            )
+         GROUP  BY 1, 2
+         ) sub
+      WHERE  team_id <> ?  -- your team_id again
+    SQL
+
+    record = (Team.find_by_sql [query, self.id, season,self.league.team_ids, self.id, self.id])[0]
+
+    "#{record.wins}-#{record.losses}-#{record.draws}"
+  end
+
+  def all_play_records_by_week(season = 2014)
+    query = <<-SQL
+    SELECT week_id
+      , count(week_points > team_points OR NULL) AS losses
+      , count(week_points < team_points OR NULL) AS wins
+      , count(week_points = team_points OR NULL) AS draws
+    --     , count(*) AS total -- redundant check
+    FROM (
+       SELECT week_id, team_id, sum(points) AS week_points
+            , first_value(sum(points)) OVER (PARTITION BY week_id
+                                             ORDER BY team_id <> ?) AS team_points
+       FROM  (SELECT id AS week_id FROM weeks WHERE year = ?) w  -- your year
+       CROSS  JOIN unnest(ARRAY[?]::int[]) t(team_id)  -- your teams, see below!
+       JOIN   player_scores p USING (week_id, team_id)
+       WHERE  EXISTS (  -- only weeks where the team actually played
+          SELECT 1 FROM player_scores
+          WHERE week_id = p.week_id
+          AND   team_id = ?
+          )
+       GROUP  BY 1, 2
+       ) sub
+    WHERE  team_id <> ?  -- your team_id again
+    GROUP  BY 1;
+    SQL
+
+    records = Team.find_by_sql [query, self.id, season,self.league.team_ids, self.id, self.id]
+  end
+
+
+
   def all_play_by_season_losses(season=2014)
     query = <<-SQL
     WITH weekly_points_table (team_id, week_id, max_points)
