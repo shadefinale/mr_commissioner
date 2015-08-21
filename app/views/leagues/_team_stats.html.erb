@@ -16,10 +16,10 @@
               </tr>
             </thead>
             <tbody>
-              <% @league.roster_counts.first.matchup_count.times do |week| %>
+              <% team.all_play_records_by_week.each_with_index do |week, index| %>
               <tr>
-                <td>Week <%= week + 1 %></td>
-                <td><%= team.all_play_by_week_record(week+1) %></td>
+                <td>Week <%= index + 1 %></td>
+                <td><%= "#{week.wins}-#{week.losses}-#{week.draws}" %></td>
               </tr>
               <% end -%>
             </tbody>
@@ -71,7 +71,7 @@
             </thead>
             <tbody>
               <tr>
-                <td><%= team.all_play_by_season_record %></td>
+                <td><%= team.all_play_seasonal_record %></td>
                 <td><%= team.all_play_by_season_percentage %></td>
               </tr>
             </tbody>
