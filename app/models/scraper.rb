@@ -16,11 +16,14 @@ class Scraper
         Week.find_or_create_by(:number => n+1, :year => @season)
       end
 
-      initialize_league_settings unless League.find_by_id(@league_id)
-
+      initialize_league_settings #unless League.find_by_id(@league_id)
       get_espn_ids
 
-      get_points
+      if season = 2015
+        get_points_weekly
+      else
+        get_points
+      end
     end
 
   end
@@ -46,30 +49,81 @@ class Scraper
 
   def get_points
 
-
     1.upto(@matchup_count).each do |w|
       week = get_week(w)
       @team_ids.each do |e|
-        page = @agent.get(scoreboard_page(e, w, 2014))
+        page = @agent.get(scoreboard_page(e, w, @season))
         name = page.parser.css('.playerTableBgRowHead')[0].text.to_s[0..-11]
         team = get_team(e, name)
         results = page.parser.css('.pncPlayerRow')
         starter_count.times do |player|
           row = results[player]
-          player = get_player(row)
-          points = points(row)
-          record_data = page.parser.css('.bodyCopy')[-2].text.split(": ")[-2].gsub("Standing", "").split("-")
-          wins = record_data[0].to_i
-          losses = record_data[1].to_i
-          ties = record_data[2].to_i
-          Record.find_or_create_by(team_id: team.id, year: @season, wins: wins, losses: losses, ties: ties)
-          PlayerScore.create(week_id: week.id, team_id: team.id,
-                          points: points, player_id: player.id,
-                          starter: true)
+          unless row.children[1].text.split(',')[0].length == 1
+            player = get_player(row)
+            unless PlayerScore.where("player_id = #{player.id} AND week_id = #{week.id}").exists?
+              points = points(row)
+              PlayerScore.create(week_id: week.id, team_id: team.id,
+                                  points: points, player_id: player.id,
+                                 starter: true)
+            end
+          end
         end
       end
     end
   end
+
+  def get_points_weekly
+    scoreboard_page = "http://games.espn.go.com/ffl/scoreboard?leagueId=#{@league_id}&seasonId=#{@season}"
+    current_week = get_current_week(scoreboard_page)
+
+    1.upto(current_week).each do |w|
+      week = get_week(w)
+      @team_ids.each do |e|
+        page = @agent.get(scoreboard_page(e, w, @season))
+        name = page.parser.css('.playerTableBgRowHead')[0].text.to_s[0..-11]
+        team = get_team(e, name)
+        results = page.parser.css('.pncPlayerRow')
+        record_data = page.parser.css('.bodyCopy')[-2].text.split(": ")[-2].gsub("Standing", "").split("-")
+        wins = record_data[0].to_i
+        losses = record_data[1].to_i
+        ties = record_data[2].to_i
+        Record.find_or_create_by(team_id: team.id, year: @season, wins: wins, losses: losses, ties: ties)
+        starter_count.times do |player|
+          row = results[player]
+          unless row.children[1].text.split(',')[0].length == 1
+            player = get_player(row)
+            unless PlayerScore.where("player_id = #{player.id} AND week_id = #{week.id}").exists?
+              points = points(row)
+              PlayerScore.create(week_id: week.id, team_id: team.id,
+                                  points: points, player_id: player.id,
+                                 starter: true)
+            end
+          end
+        end
+        n = starter_count
+        loop do
+          row = results[n]
+          break if row.nil? || row.children[0].to_s.split(" ")[2][-2..-1] != "20"
+          unless row.children[1].text.split(',')[0].length == 1
+            player = get_player(row)
+            unless PlayerScore.where("player_id = #{player.id} AND week_id = #{week.id}").exists?
+              points = points(row)
+              PlayerScore.create(week_id: week.id, team_id: team.id,
+                                  points: points, player_id: player.id,
+                                 starter: false)
+            end
+          end
+          n += 1
+        end
+      end
+    end
+  end
+
+  def get_current_week(page, season = 2015)
+    page = @agent.get(page)
+    week = page.search("em").text.split(" ")[-1].to_i
+  end
+
 
   def points(row)
     points = row.children[-1].text.to_f
@@ -83,9 +137,13 @@ class Scraper
   end
 
   def get_player(row)
-    position = row.children[0].text
+    p row.text
+    p row.children[1].text.gsub(/[[:space:]]/, ' ')
+    p row.children[1].text.gsub(/[[:space:]]/, ' ').split(" ")[-1]
+    # p row.children[1].text.gsub(/[[:space:]]/, ' ').split(",").split(" ")[1]
+    position = row.children[1].text.gsub(/[[:space:]]/, ' ').split(" ")[-1]
     name = row.children[1].text.split(',')[0]
-    Player.find_or_create_by(name: name, position: position)
+    Player.find_or_create_by(name: name, position: position) unless name.length == 1
   end
 
   def get_week(w)
@@ -221,7 +279,6 @@ class Scraper
   end
 
   def create_league
-    league = League.new(id: @league_id, name: @league_name)
-    league.save
+    League.create(id: @league_id, name: @league_name) unless League.find_by_id(@league_id)
   end
 end
