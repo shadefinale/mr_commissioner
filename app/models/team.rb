@@ -38,7 +38,7 @@ class Team < ActiveRecord::Base
   # end
 
   def matchup_count(season = 2015)
-    self.league.roster_counts.find_by(year: season).matchup_count
+    Record.find_by(team_id: self.id, year: season)
   end
 
   def season_total(season=2015)
