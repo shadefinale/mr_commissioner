@@ -87,7 +87,8 @@ class Scraper
         wins = record_data[0].to_i
         losses = record_data[1].to_i
         ties = record_data[2].to_i
-        Record.find_or_create_by(team_id: team.id, year: @season, wins: wins, losses: losses, ties: ties)
+        r = Record.find_or_create_by(team_id: team.id, year: @season)
+        r.update(wins: wins, losses: losses, ties: ties)
         starter_count.times do |player|
           row = results[player]
           unless row.children[1].text.split(',')[0].length == 1
@@ -106,7 +107,7 @@ class Scraper
           break if row.nil? || row.children[0].to_s.split(" ")[2][-2..-1] != "20"
           unless row.children[1].text.split(',')[0].length == 1
             player = get_player(row)
-            unless PlayerScore.where("player_id = #{player.id} AND week_id = #{week.id}").exists?
+            unless PlayerScore.where("player_id = #{player.id} AND week_id = #{week.id} AND team_id = #{team.id}").exists?
               points = points(row)
               PlayerScore.create(week_id: week.id, team_id: team.id,
                                   points: points, player_id: player.id,
@@ -136,14 +137,21 @@ class Scraper
     target
   end
 
+  def positions
+    ['QB', 'RB', 'WR', 'TE', 'K', 'D/ST',
+     'LB', 'DB', 'DL', 'DT', 'DE', 'CB', 'S']
+  end
+
   def get_player(row)
     p row.text
     p row.children[1].text.gsub(/[[:space:]]/, ' ')
     p row.children[1].text.gsub(/[[:space:]]/, ' ').split(" ")[-1]
     # p row.children[1].text.gsub(/[[:space:]]/, ' ').split(",").split(" ")[1]
-    position = row.children[1].text.gsub(/[[:space:]]/, ' ').split(" ")[-1]
+    position = (row.children[1].text.gsub(/[[:space:]]/, ' ').split(" ") & positions)[0]
+
+
     name = row.children[1].text.split(',')[0]
-    Player.find_or_create_by(name: name, position: position) unless name.length == 1
+    Player.find_or_create_by(name: name, position: position[0]) unless name.length == 1
   end
 
   def get_week(w)

@@ -22,7 +22,7 @@ class League < ActiveRecord::Base
       FROM player_scores
       INNER JOIN weeks ON weeks.id = player_scores.week_id
       INNER JOIN teams ON teams.id = player_scores.team_id
-      WHERE (team_id IN (?) AND weeks.year = ?)
+      WHERE (team_id IN (?) AND weeks.year = ? AND starter = true)
       GROUP BY teams.id, weeks.id
     )
     SELECT team_id, record_name, SUM(rank) as record
@@ -48,7 +48,7 @@ class League < ActiveRecord::Base
       FROM player_scores
       INNER JOIN weeks ON weeks.id = player_scores.week_id
       INNER JOIN teams ON teams.id = player_scores.team_id
-      WHERE (team_id IN (?) AND weeks.year = ?)
+      WHERE (team_id IN (?) AND weeks.year = ? AND starter = true)
       GROUP BY teams.id, weeks.id
     )
     SELECT team_id, record_name, SUM(rank) as record
@@ -77,7 +77,7 @@ class League < ActiveRecord::Base
     INNER JOIN teams ON teams.id = player_scores.team_id
     INNER JOIN leagues ON leagues.id = teams.league_id
     INNER JOIN weeks ON weeks.id = player_scores.week_id
-    WHERE (league_id = ? AND weeks.year = 2015)
+    WHERE (league_id = ? AND weeks.year = 2015 AND starter = true)
     GROUP BY teams.name
     ORDER BY total_points DESC
     LIMIT 1
@@ -93,7 +93,7 @@ class League < ActiveRecord::Base
     INNER JOIN teams ON teams.id = player_scores.team_id
     INNER JOIN leagues ON leagues.id = teams.league_id
     INNER JOIN weeks ON weeks.id = player_scores.week_id
-    WHERE (league_id = ? AND weeks.year = 2015)
+    WHERE (league_id = ? AND weeks.year = 2015 AND starter = true)
     GROUP BY teams.name
     ORDER BY total_points ASC
     LIMIT 1
@@ -117,7 +117,7 @@ class League < ActiveRecord::Base
 
     result = PlayerScore.joins(:week).joins(:team)
     .select("teams.name, weeks.number, SUM(player_scores.points) as points")
-    .where("league_id = ? AND weeks.year = ?", self.id, season)
+    .where("league_id = ? AND weeks.year = ? AND starter = true", self.id, season)
     .group("teams.name, player_scores.week_id, weeks.number")
     .order("points DESC")
     .first
@@ -139,7 +139,7 @@ class League < ActiveRecord::Base
     # end
     result = PlayerScore.joins(:week).joins(:team)
     .select("teams.name, weeks.number, SUM(player_scores.points) as points")
-    .where("league_id = ? AND weeks.year = ?", self.id, season)
+    .where("league_id = ? AND weeks.year = ? AND starter = true", self.id, season)
     .group("teams.name, player_scores.week_id, weeks.number")
     .order("points")
     .first
