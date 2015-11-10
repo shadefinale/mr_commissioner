@@ -8,7 +8,7 @@ class League < ActiveRecord::Base
     self.teams.count
   end
 
-  def best_all_play_record(season = 2014)
+  def best_all_play_record(season = 2015)
     query = <<-SQL
     WITH weekly_points_table (team_id, record_name, week, team_name, max_points, rank)
     AS
@@ -34,7 +34,7 @@ class League < ActiveRecord::Base
     (PlayerScore.find_by_sql [query, self.team_ids, season])[0].record_name
   end
 
-  def worst_all_play_record(season = 2014)
+  def worst_all_play_record(season = 2015)
     query = <<-SQL
     WITH weekly_points_table (team_id, record_name, week, team_name, max_points, rank)
     AS
@@ -60,7 +60,7 @@ class League < ActiveRecord::Base
     (PlayerScore.find_by_sql [query, self.team_ids, season])[0].record_name
   end
 
-  def highest_season_total(season=2014)
+  def highest_season_total(season=2015)
     # current_highest = 0
     # highest_team = nil
 
@@ -77,7 +77,7 @@ class League < ActiveRecord::Base
     INNER JOIN teams ON teams.id = player_scores.team_id
     INNER JOIN leagues ON leagues.id = teams.league_id
     INNER JOIN weeks ON weeks.id = player_scores.week_id
-    WHERE (league_id = ? AND weeks.year = 2014)
+    WHERE (league_id = ? AND weeks.year = 2015)
     GROUP BY teams.name
     ORDER BY total_points DESC
     LIMIT 1
@@ -86,14 +86,14 @@ class League < ActiveRecord::Base
     [sql.total_points, sql.name]
   end
 
-  def lowest_season_total(season=2014)
+  def lowest_season_total(season=2015)
     query = <<-SQL
     SELECT teams.name, SUM(player_scores.points) as total_points
     FROM player_scores
     INNER JOIN teams ON teams.id = player_scores.team_id
     INNER JOIN leagues ON leagues.id = teams.league_id
     INNER JOIN weeks ON weeks.id = player_scores.week_id
-    WHERE (league_id = ? AND weeks.year = 2014)
+    WHERE (league_id = ? AND weeks.year = 2015)
     GROUP BY teams.name
     ORDER BY total_points ASC
     LIMIT 1
@@ -102,7 +102,7 @@ class League < ActiveRecord::Base
     [sql.total_points, sql.name]
   end
 
-  def best_week(season=2014)
+  def best_week(season=2015)
     # current_highest = 0
     # highest_team = nil
     # week = 0
@@ -125,7 +125,7 @@ class League < ActiveRecord::Base
     # [current_highest, highest_team.name, week]
   end
 
-  def worst_week(season = 2014)
+  def worst_week(season = 2015)
     # current_lowest = 100000000
     # lowest_team = nil
     # week = 0
