@@ -83,7 +83,7 @@ class Scraper
         name = page.parser.css('.playerTableBgRowHead')[0].text.to_s[0..-11]
         team = get_team(e, name)
         results = page.parser.css('.pncPlayerRow')
-        record_data = page.parser.css('.bodyCopy')[-2].text.split(": ")[-2].gsub("Standing", "").split("-")
+        record_data = page.parser.css('.bodyCopy')[-2].text.split(": ")[-3].scan(/\d/)
         wins = record_data[0].to_i
         losses = record_data[1].to_i
         ties = record_data[2].to_i

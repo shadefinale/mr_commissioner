@@ -3,12 +3,12 @@ class Team < ActiveRecord::Base
   belongs_to :league
   has_many :records
 
-  def weekly_scores(week, season=2014)
+  def weekly_scores(week, season=2015)
     # self.player_scores.where(:week_id => get_week_id(week, season)).sum(:points)
     PlayerScore.joins(:week).where("team_id = ? AND weeks.year = ? AND weeks.number = ?", self.id, season, week).sum(:points)
   end
 
-  def best_week(season=2014)
+  def best_week(season=2015)
     week = PlayerScore.joins(:week)
     .select("weeks.number, SUM(player_scores.points) as points")
     .where("team_id = ? AND weeks.year = ?", self.id, season)
@@ -19,7 +19,7 @@ class Team < ActiveRecord::Base
     [week.points, week.number]
   end
 
-  def worst_week(season=2014)
+  def worst_week(season=2015)
     week = PlayerScore.joins(:week)
     .select("weeks.number, SUM(player_scores.points) as points")
     .where("team_id = ? AND weeks.year = ?", self.id, season)
@@ -30,24 +30,24 @@ class Team < ActiveRecord::Base
     [week.points, week.number]
   end
 
-  # def get_all_scores(season=2014)
+  # def get_all_scores(season=2015)
   #   PlayerScore.joins(:week)
   #   .select("SUM(player_scores.points) as points")
   #   .where("team_id = ? AND weeks.year = ?", self.id, season)
   #   .group("player_scores.week_id")
   # end
 
-  def matchup_count(season = 2014)
+  def matchup_count(season = 2015)
     self.league.roster_counts.find_by(year: season).matchup_count
   end
 
-  def season_total(season=2014)
+  def season_total(season=2015)
     PlayerScore.joins(:week).where("team_id = ? AND weeks.year = ?", self.id, season).sum(:points)
   end
 
 
 
-  def all_play_by_week_wins(week, season=2014)
+  def all_play_by_week_wins(week, season=2015)
     query = <<-SQL
     WITH weekly_points_table (team_id, max_points)
     AS
@@ -70,7 +70,7 @@ class Team < ActiveRecord::Base
     (PlayerScore.find_by_sql [query, self.league.team_ids, week, season, self.id])[0].wins
   end
 
-  def all_play_by_season_wins(season=2014)
+  def all_play_by_season_wins(season=2015)
     query = <<-SQL
     WITH weekly_points_table (team_id, week_id, max_points)
     AS
@@ -92,7 +92,7 @@ class Team < ActiveRecord::Base
     (PlayerScore.find_by_sql [query, self.league.team_ids, season, self.id])[0].season_wins
   end
 
-  def all_play_by_week_losses(week, season=2014)
+  def all_play_by_week_losses(week, season=2015)
     query = <<-SQL
     WITH weekly_points_table (team_id, max_points)
     AS
@@ -115,7 +115,7 @@ class Team < ActiveRecord::Base
     (PlayerScore.find_by_sql [query, self.league.team_ids, week, season, self.id])[0].losses
   end
 
-  def all_play_seasonal_record(season = 2014)
+  def all_play_seasonal_record(season = 2015)
     query = <<-SQL
       SELECT (SUM(count(week_points < team_points OR NULL)) OVER (ORDER BY 1) :: integer) AS wins,
              (SUM(count(week_points > team_points OR NULL)) OVER (ORDER BY 1) :: integer) AS losses,
@@ -143,7 +143,7 @@ class Team < ActiveRecord::Base
     "#{record.wins}-#{record.losses}-#{record.draws}"
   end
 
-  def all_play_records_by_week(season = 2014)
+  def all_play_records_by_week(season = 2015)
     query = <<-SQL
     SELECT week_id
       , count(week_points > team_points OR NULL) AS losses
@@ -173,7 +173,7 @@ class Team < ActiveRecord::Base
 
 
 
-  def all_play_by_season_losses(season=2014)
+  def all_play_by_season_losses(season=2015)
     query = <<-SQL
     WITH weekly_points_table (team_id, week_id, max_points)
     AS
@@ -195,42 +195,42 @@ class Team < ActiveRecord::Base
     (PlayerScore.find_by_sql [query, self.league.team_ids, season, self.id])[0].season_losses
   end
 
-  def all_play_by_week_record(week, season=2014)
+  def all_play_by_week_record(week, season=2015)
     wins = all_play_by_week_wins(week, season)
     losses = all_play_by_week_losses(week, season)
     ties = (self.league.teams.count-1) - (wins + losses)
     "#{wins}-#{losses}-#{ties}"
   end
 
-  def all_play_by_season_record(season=2014)
+  def all_play_by_season_record(season=2015)
     wins = all_play_by_season_wins(season)
     losses = all_play_by_season_losses(season)
     ties = ((self.league.teams.count-1) * (self.league.roster_counts.first.matchup_count)) - (wins + losses)
     "#{wins}-#{losses}-#{ties}"
   end
 
-  def all_play_by_week_percentage(week, season=2014)
+  def all_play_by_week_percentage(week, season=2015)
     (all_play_by_week_wins(week, season).to_f / (self.league.teams.count - 1)).round(3)
   end
 
-  def all_play_by_season_percentage(season=2014)
+  def all_play_by_season_percentage(season=2015)
     (all_play_by_season_wins(season).to_f / ((self.league.teams.count - 1) * self.league.roster_counts.first.matchup_count)).round(3)
   end
 
-  def actual_record(season = 2014)
+  def actual_record(season = 2015)
     record = self.records.find_by(year: season)
     "#{record.wins}-#{record.losses}-#{record.ties}"
   end
 
-  def actual_wins(season = 2014)
+  def actual_wins(season = 2015)
     self.records.find_by(year: season).wins
   end
 
-  def average_all_play_wins(season=2014)
+  def average_all_play_wins(season = 2015)
     (self.all_play_by_season_wins.to_f / self.matchup_count(season)).round
   end
 
-  def wins_over_average(season = 2014)
+  def wins_over_average(season = 2015)
     actual_wins(season) - average_all_play_wins(season)
   end
 
