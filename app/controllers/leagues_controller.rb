@@ -40,7 +40,7 @@ class LeaguesController < ApplicationController
 
     def scrape_new_league(id)
       begin
-        Scraper.new(id, 2014).scrape_all
+        Scraper.new(id, 2015).scrape_all
         new_league = League.order(:created_at).last
         current_user.leagues << new_league if current_user && !(current_user.leagues.include?(new_league))
         redirect_to new_league
