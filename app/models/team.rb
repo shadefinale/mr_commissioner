@@ -66,7 +66,6 @@ class Team < ActiveRecord::Base
       WHERE team_id = ?
     )
     SQL
-
     (PlayerScore.find_by_sql [query, self.league.team_ids, week, season, self.id])[0].wins
   end
 
@@ -161,7 +160,7 @@ class Team < ActiveRecord::Base
           SELECT 1 FROM player_scores
           WHERE week_id = p.week_id
           AND   team_id = ?
-          )
+          ) AND starter = true
        GROUP  BY 1, 2
        ) sub
     WHERE  team_id <> ?  -- your team_id again

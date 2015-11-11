@@ -93,7 +93,7 @@ class Scraper
           row = results[player]
           unless row.children[1].text.split(',')[0].length == 1
             player = get_player(row)
-            unless PlayerScore.where("player_id = #{player.id} AND week_id = #{week.id}").exists?
+            unless PlayerScore.where("player_id = #{player.id} AND week_id = #{week.id} AND team_id = #{team.id}").exists?
               points = points(row)
               PlayerScore.create(week_id: week.id, team_id: team.id,
                                   points: points, player_id: player.id,
