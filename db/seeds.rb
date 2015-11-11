@@ -12,6 +12,9 @@ Team.destroy_all
 PlayerScore.destroy_all
 Week.destroy_all
 
-
-s = Scraper.new(143124, 2015)
+s = Scraper.new(143_124, 2015)
+s.scrape_all
+s = Scraper.new(143_424, 2015)
+s.scrape_all
+s = Scraper.new(332_312, 2015)
 s.scrape_all
