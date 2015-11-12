@@ -5,24 +5,23 @@ class Team < ActiveRecord::Base
 
   def weekly_scores(week, season=2015)
     # self.player_scores.where(:week_id => get_week_id(week, season)).sum(:points)
-    PlayerScore.joins(:week).where("team_id = ? AND weeks.year = ? AND weeks.number = ?", self.id, season, week).sum(:points)
+    PlayerScore.joins(:week).where("team_id = ? AND weeks.year = ? AND weeks.number = ? AND starter = true", self.id, season, week).sum(:points)
   end
 
   def best_week(season=2015)
     week = PlayerScore.joins(:week)
     .select("weeks.number, SUM(player_scores.points) as points")
-    .where("team_id = ? AND weeks.year = ?", self.id, season)
+    .where("team_id = ? AND weeks.year = ? AND starter = true", self.id, season)
     .group("player_scores.week_id, weeks.number")
     .order("points DESC")
     .first
-
     [week.points, week.number]
   end
 
   def worst_week(season=2015)
     week = PlayerScore.joins(:week)
     .select("weeks.number, SUM(player_scores.points) as points")
-    .where("team_id = ? AND weeks.year = ?", self.id, season)
+    .where("team_id = ? AND weeks.year = ? AND starter = true", self.id, season)
     .group("player_scores.week_id, weeks.number")
     .order("points")
     .first
@@ -38,11 +37,12 @@ class Team < ActiveRecord::Base
   # end
 
   def matchup_count(season = 2015)
-    self.league.roster_counts.find_by(year: season).matchup_count
+    r = Record.find_by(team_id: self.id, year: season)
+    r.wins + r.losses + r.ties
   end
 
   def season_total(season=2015)
-    PlayerScore.joins(:week).where("team_id = ? AND weeks.year = ?", self.id, season).sum(:points)
+    PlayerScore.joins(:week).where("team_id = ? AND weeks.year = ? AND starter = true", self.id, season).sum(:points)
   end
 
 
@@ -56,7 +56,7 @@ class Team < ActiveRecord::Base
       FROM player_scores
       INNER JOIN weeks ON weeks.id = player_scores.week_id
       INNER JOIN teams ON teams.id = player_scores.team_id
-      WHERE (team_id IN (?) AND weeks.number = ? and weeks.year = ?)
+      WHERE (team_id IN (?) AND weeks.number = ? and weeks.year = ? AND starter = true)
       GROUP BY teams.id
     )
     SELECT COUNT(*) as wins
@@ -66,7 +66,6 @@ class Team < ActiveRecord::Base
       WHERE team_id = ?
     )
     SQL
-
     (PlayerScore.find_by_sql [query, self.league.team_ids, week, season, self.id])[0].wins
   end
 
@@ -79,7 +78,7 @@ class Team < ActiveRecord::Base
       FROM player_scores
       INNER JOIN weeks ON weeks.id = player_scores.week_id
       INNER JOIN teams ON teams.id = player_scores.team_id
-      WHERE (team_id IN (?) AND weeks.year = ?)
+      WHERE (team_id IN (?) AND weeks.year = ? AND starter = true)
       GROUP BY teams.id, weeks.id
     )
     SELECT COUNT(*) as season_wins
@@ -101,7 +100,7 @@ class Team < ActiveRecord::Base
       FROM player_scores
       INNER JOIN weeks ON weeks.id = player_scores.week_id
       INNER JOIN teams ON teams.id = player_scores.team_id
-      WHERE (team_id IN (?) AND weeks.number = ? and weeks.year = ?)
+      WHERE (team_id IN (?) AND weeks.number = ? and weeks.year = ? AND starter = true)
       GROUP BY teams.id
     )
     SELECT COUNT(*) as losses
@@ -161,14 +160,14 @@ class Team < ActiveRecord::Base
           SELECT 1 FROM player_scores
           WHERE week_id = p.week_id
           AND   team_id = ?
-          )
+          ) AND starter = true
        GROUP  BY 1, 2
        ) sub
     WHERE  team_id <> ?  -- your team_id again
     GROUP  BY 1;
     SQL
 
-    records = Team.find_by_sql [query, self.id, season,self.league.team_ids, self.id, self.id]
+    records = Team.find_by_sql [query, self.id, season, self.league.team_ids, self.id, self.id]
   end
 
 
