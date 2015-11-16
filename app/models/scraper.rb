@@ -14,13 +14,13 @@ class Scraper
   def scrape_all
     # Test to see if the league is scrapeable
     league = League.find_by_id(@league_id)
-    raise NotScrapeableError unless league.scrapeable
-    raise LeagueAlreadyScrappedError if league.done_scraping
+    return "League not scrapeable" unless league.scrapeable
+    return "League already scraped" if league.done_scraping
 
     test_page = @agent.get(base_page)
     unless test_page.body.include?('Standings')
       league.update(scrapeable: false)
-      raise LeagueNotPublicError, "Must be a public league"
+      return "Must be a public league"
     end
 
 
