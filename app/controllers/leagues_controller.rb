@@ -18,7 +18,7 @@ class LeaguesController < ApplicationController
         #notify_user(current_user.id, league.id) if current_user
         redirect_to league
       else
-        scrape_new_league(params[:id])
+        self.delay.scrape_new_league(params[:id])
       end
     else
       flash[:notice] = 'The specified league does not exist.'

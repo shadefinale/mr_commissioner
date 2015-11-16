@@ -87,6 +87,11 @@ GEM
     coolline (0.5.0)
       unicode_utils (~> 1.4)
     debug_inspector (0.0.2)
+    delayed_job (4.1.1)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.1.0)
+      activerecord (>= 3.0, < 5)
+      delayed_job (>= 3.0, < 5)
     diff-lcs (1.2.5)
     diffy (3.0.7)
     domain_name (0.5.24)
@@ -198,6 +203,7 @@ GEM
     pry-stack_explorer (0.4.9.2)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
+    puma (2.15.3)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -318,6 +324,7 @@ DEPENDENCIES
   byebug
   capybara
   coffee-rails (~> 4.1.0)
+  delayed_job_active_record
   factory_girl_rails (~> 4.0)
   figaro
   git-hooks
@@ -328,6 +335,7 @@ DEPENDENCIES
   letter_opener
   mechanize
   pg
+  puma
   rails (= 4.2.3)
   rails_12factor
   rspec-rails
