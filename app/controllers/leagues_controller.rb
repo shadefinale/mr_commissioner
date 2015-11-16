@@ -12,16 +12,22 @@ class LeaguesController < ApplicationController
 
   def create
     if params[:id].to_i > 0 && params[:id].to_i < 2147483647
-      league = League.find_by("id = ?", params[:id])
-      if league
+      league = League.find_or_create_by(id: params[:id])
+      if league.done_scraping
+        redirect_to league_path(league)
+      elsif league.scrapeable
         current_user.leagues << league if current_user && !(current_user.leagues.include?(league))
         #notify_user(current_user.id, league.id) if current_user
-        redirect_to league
+        scrape_new_league(params[:id])
+        flash[:notice] = "Please check back in a few minutes"
+        redirect_to root_path
       else
-        self.delay.scrape_new_league(params[:id])
+        flash[:notice] = "LeagueID not found, or it is a private league."
+        redirect_to root_path
+
       end
     else
-      flash[:notice] = 'The specified league does not exist.'
+      flash[:notice] = "LeagueID not found, or it is a private league."
       redirect_to root_path
     end
   end
@@ -39,15 +45,15 @@ class LeaguesController < ApplicationController
     end
 
     def scrape_new_league(id)
-      begin
-        Scraper.new(id, 2015).scrape_all
-        new_league = League.order(:created_at).last
-        current_user.leagues << new_league if current_user && !(current_user.leagues.include?(new_league))
-        redirect_to new_league
-      rescue Exception => e
-        flash[:notice] = 'The specified league could not be found.'
-        redirect_to signin_path
+      new_league = League.find_or_create_by(id: id)
+      if !new_league.scrapeable
+        flash[:notice] = "League cannot be found, or is set to private, or\
+          sraping is still in progress."
+      else
+        new_league.delay.scrape
+        flash[:notice] = "Please check back in a few minutes"
       end
+      # current_user.leagues << new_league if current_user && !(current_user.leagues.include?(new_league))
     end
 
     def notify_user(user_id, league_id)

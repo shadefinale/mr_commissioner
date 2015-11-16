@@ -3,7 +3,9 @@ class League < ActiveRecord::Base
   has_many :teams
   has_many :roster_counts
 
-
+  def scrape
+    Scraper.new(self.id, 2015).scrape_all
+  end
   def team_count
     self.teams.count
   end

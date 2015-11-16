@@ -1,8 +1,9 @@
+require 'mechanize'
 # The scraper class is used to glean information from ESPN's fantasy leagues.
 class Scraper
   attr_reader :team_count, :league_name
 
-  def initialize(league_id, season = DateTime.now.year)
+  def initialize(league_id, season = 2015)
     fail ArgumentError unless league_id.to_s =~ /^\d+$/
     @agent = Mechanize.new
     @agent.history_added = Proc.new { sleep 0.1 }
@@ -11,6 +12,18 @@ class Scraper
   end
 
   def scrape_all
+    # Test to see if the league is scrapeable
+    league = League.find_by_id(@league_id)
+    raise NotScrapeableError unless league.scrapeable
+    raise LeagueAlreadyScrappedError if league.done_scraping
+
+    test_page = @agent.get(base_page)
+    unless test_page.body.include?('Standings')
+      league.update(scrapeable: false)
+      raise LeagueNotPublicError, "Must be a public league"
+    end
+
+
     ActiveRecord::Base.transaction do
       16.times do |n|
         Week.find_or_create_by(:number => n+1, :year => @season)
@@ -24,6 +37,7 @@ class Scraper
       else
         get_points
       end
+      League.find_by_id(@league_id).update(done_scraping: true)
     end
 
   end
