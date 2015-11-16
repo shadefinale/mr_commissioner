@@ -1,0 +1,3 @@
+require 'scraper'
+
+Scraper
