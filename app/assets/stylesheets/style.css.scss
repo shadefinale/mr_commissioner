@@ -16,7 +16,7 @@ body {
     font-family: 'Ruda', sans-serif;
     padding: 0px !important;
     margin: 0px !important;
-    font-size:13px;
+    font-size: 120%;
 }
 
 ul li {
@@ -1767,6 +1767,10 @@ label {
 
   aside {
     display: none;
+  }
+
+  body {
+    font-size: 350%
   }
 }
 
