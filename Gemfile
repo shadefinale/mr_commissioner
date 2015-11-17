@@ -35,6 +35,7 @@ gem 'daemons'
 # Use Puma as the app server
 gem 'puma'
 
+gem 'rails_12factor'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -55,5 +56,4 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'jazz_hands', github: 'nixme/jazz_hands', branch: 'bring-your-own-debugger'
   gem 'better_errors'
-  gem 'rails_12factor'
 end
