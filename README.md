@@ -32,7 +32,7 @@ Otherwise, a "Please check back later" message is given, as the scraping duties 
 
 ####The scraper
 
-When the scraper is initialized, it is passed a leagueID and season to scrape. By default the season is `2015`.  The scraper uses the Mechanize gem. 
+When the scraper is initialized, it is passed a leagueID and season to scrape. By default the season is `2015`.  The scraper uses the Mechanize gem.
 
 When the `scrape_all` method is called, Mechanize visits the matchup pages for each team for each week. This means that for a league of 10 teams and 10 weeks, 100 page visits are required.
 
@@ -61,7 +61,7 @@ Next, on `League` class, we define a method to iterate through each team and fin
 def highest_season_total(season = 2015)
   current_hightest = 0
   highest_team = nil
-  
+
   teams.each do |team|
     if team.season_total(season) > current_highest
     current_highest = team.season_total(season)
@@ -87,23 +87,25 @@ def highest_season_total(season = 2015)
   LIMIT 1
   SQL
   sql = (PlayerScore.find_by_sql [query, self.id]).first
-  
+
   [sql.total_points, sql.name]
 ```
 
 What this query does (in English), is it selects the team name and sum of player\_score points (aliased as total\_points) from the player\_scores table, joined on the teams table joined on the leagues table, joined on the weeks table where the leagueID is the league's own ID, the year is the given season, and the player is a starter. The query then orders the table according to total\_points, and grabs the highest one.
 
-By changing out methods from Ruby to SQL, as we did this one, we were able to get out page load time from 12+ seconds, down to sub 1 second. 
+By changing out methods from Ruby to SQL, as we did this one, we were able to get out page load time from 12+ seconds, down to sub 1 second.
 
 ##Next steps
-The first and biggest step to be taken next is to transform our scraper class from a collection of scripts to a truely object-oriented style class. Doing this will help to isolate bugs that crop in in certain legues regarding the scraping. 
+The first and biggest step to be taken next is to transform our scraper class from a collection of scripts to a truely object-oriented style class. Doing this will help to isolate bugs that crop in in certain legues regarding the scraping.
 
 After the scraper class is fixed, and bugs are squashed, the next step will be to add more functionality. Some ideas, in no particular order:
 
 * Ideal line-up. Given the starter_count for each league, find the ideal line up for each team each week. Another interesting idea is to find the ideal line-up accross the entire league.
 * Player-Score deviation. The best players are the ones most likely not to deviate from their predicted score. Find the players that deviate most and the least in a particular team/league.
 * Free agency. Right now the scraper only looks at players actually on a team. Extend the scraper to look at free agents to calulate ideal line-ups/player-score deviation
-
+* Testing using VCR. Right now I have to skip the tests that depend on the
+  scraper because they take too long. Set up the test suite to use VCR so these
+  tests can be incorporated.
 
 
 
