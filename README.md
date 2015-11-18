@@ -67,8 +67,9 @@ def highest_season_total(season = 2015)
     current_highest = team.season_total(season)
     highest_team = team
   end
+
+  [current_highest, highest_team.name]
 end
-[current_highest, highest_team.name]
 ```
 
 The new method, using SQL looks like this:
@@ -89,6 +90,7 @@ def highest_season_total(season = 2015)
   sql = (PlayerScore.find_by_sql [query, self.id]).first
 
   [sql.total_points, sql.name]
+end
 ```
 
 What this query does (in English), is it selects the team name and sum of player\_score points (aliased as total\_points) from the player\_scores table, joined on the teams table joined on the leagues table, joined on the weeks table where the leagueID is the league's own ID, the year is the given season, and the player is a starter. The query then orders the table according to total\_points, and grabs the highest one.
