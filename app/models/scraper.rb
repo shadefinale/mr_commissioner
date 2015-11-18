@@ -32,7 +32,7 @@ class Scraper
       initialize_league_settings #unless League.find_by_id(@league_id)
       get_espn_ids
 
-      if season = 2015
+      if season == 2015
         get_points_weekly
       else
         get_points
